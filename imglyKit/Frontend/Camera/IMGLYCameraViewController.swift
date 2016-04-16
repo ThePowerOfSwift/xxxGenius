@@ -97,7 +97,7 @@ public class IMGLYCameraViewController: UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(UIImage(named: "flash_auto", inBundle: bundle, compatibleWithTraitCollection: nil), forState: .Normal)
         button.contentHorizontalAlignment = .Left
-        button.addTarget(self, action: "changeFlash:", forControlEvents: .TouchUpInside)
+        button.addTarget(self, action: #selector(changeFlash), forControlEvents: .TouchUpInside)
         button.hidden = true
         return button
         }()
@@ -108,7 +108,7 @@ public class IMGLYCameraViewController: UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(UIImage(named: "cam_switch", inBundle: bundle, compatibleWithTraitCollection: nil), forState: .Normal)
         button.contentHorizontalAlignment = .Right
-        button.addTarget(self, action: "switchCamera:", forControlEvents: .TouchUpInside)
+        button.addTarget(self, action: #selector(switchCamera), forControlEvents: .TouchUpInside)
         button.hidden = true
         return button
         }()
@@ -121,7 +121,7 @@ public class IMGLYCameraViewController: UIViewController {
         button.imageView?.contentMode = .ScaleAspectFill
         button.layer.cornerRadius = 3
         button.clipsToBounds = true
-        button.addTarget(self, action: "showCameraRoll:", forControlEvents: .TouchUpInside)
+        button.addTarget(self, action: #selector(showCameraRoll), forControlEvents: .TouchUpInside)
         return button
         }()
     
@@ -149,7 +149,7 @@ public class IMGLYCameraViewController: UIViewController {
         button.setImage(UIImage(named: "show_filter", inBundle: bundle, compatibleWithTraitCollection: nil), forState: .Normal)
         button.layer.cornerRadius = 3
         button.clipsToBounds = true
-        button.addTarget(self, action: "toggleFilters:", forControlEvents: .TouchUpInside)
+        button.addTarget(self, action: #selector(toggleFilters), forControlEvents: .TouchUpInside)
         button.transform = CGAffineTransformMakeRotation(CGFloat(M_PI))
         return button
         }()
@@ -162,7 +162,7 @@ public class IMGLYCameraViewController: UIViewController {
         slider.maximumValue = 1
         slider.value = 0.75
         slider.alpha = 0
-        slider.addTarget(self, action: "changeIntensity:", forControlEvents: .ValueChanged)
+        slider.addTarget(self, action: #selector(changeIntensity), forControlEvents: .ValueChanged)
         
         slider.minimumTrackTintColor = UIColor.whiteColor()
         slider.maximumTrackTintColor = UIColor.whiteColor()
@@ -175,12 +175,12 @@ public class IMGLYCameraViewController: UIViewController {
     }()
     
     public private(set) lazy var swipeRightGestureRecognizer: UISwipeGestureRecognizer = {
-        let recognizer = UISwipeGestureRecognizer(target: self, action: "toggleMode:")
+        let recognizer = UISwipeGestureRecognizer(target: self, action: #selector(toggleMode))
         return recognizer
     }()
     
     public private(set) lazy var swipeLeftGestureRecognizer: UISwipeGestureRecognizer = {
-        let recognizer = UISwipeGestureRecognizer(target: self, action: "toggleMode:")
+        let recognizer = UISwipeGestureRecognizer(target: self, action: #selector(toggleMode))
         recognizer.direction = .Left
         return recognizer
     }()
@@ -329,7 +329,7 @@ public class IMGLYCameraViewController: UIViewController {
             recordingModeSelectionButtons = recordingModes.map { $0.selectionButton }
             
             for recordingModeSelectionButton in recordingModeSelectionButtons {
-                recordingModeSelectionButton.addTarget(self, action: "toggleMode:", forControlEvents: .TouchUpInside)
+                recordingModeSelectionButton.addTarget(self, action: #selector(toggleMode), forControlEvents: .TouchUpInside)
             }
         }
     }
@@ -596,7 +596,7 @@ public class IMGLYCameraViewController: UIViewController {
     
     private func resetHideSliderTimer() {
         hideSliderTimer?.invalidate()
-        hideSliderTimer = NSTimer.scheduledTimerWithTimeInterval(ShowFilterIntensitySliderInterval, target: self, selector: "hideFilterIntensitySlider:", userInfo: nil, repeats: false)
+        hideSliderTimer = NSTimer.scheduledTimerWithTimeInterval(ShowFilterIntensitySliderInterval, target: self, selector: #selector(hideFilterIntensitySlider), userInfo: nil, repeats: false)
     }
     
     private func showEditorNavigationControllerWithImage(image: UIImage) {
@@ -785,7 +785,7 @@ public class IMGLYCameraViewController: UIViewController {
     
     private func editorCompletionBlock(result: IMGLYEditorResult, image: UIImage?) {
         if let image = image where result == .Done {
-            UIImageWriteToSavedPhotosAlbum(image, self, "image:didFinishSavingWithError:contextInfo:", nil)
+            UIImageWriteToSavedPhotosAlbum(image, self, #selector(IMGLYCameraViewController.image(_:didFinishSavingWithError:contextInfo:)), nil)
         }
         
         dismissViewControllerAnimated(true, completion: nil)

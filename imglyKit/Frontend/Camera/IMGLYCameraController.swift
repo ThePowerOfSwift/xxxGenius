@@ -510,7 +510,7 @@ public class IMGLYCameraController: NSObject {
         focusIndicatorLayer.anchorPoint = CGPoint(x: 0.5, y: 0.5)
         previewView.layer.addSublayer(focusIndicatorLayer)
         
-        tapGestureRecognizer.addTarget(self, action: "tapped:")
+        tapGestureRecognizer.addTarget(self, action: #selector(tapped))
         
         if let videoPreviewView = videoPreviewView {
             videoPreviewView.addGestureRecognizer(tapGestureRecognizer)
@@ -952,7 +952,7 @@ public class IMGLYCameraController: NSObject {
             device.addObserver(self, forKeyPath: "exposureMode", options: [.Old, .New], context: &FocusAndExposureContext)
         }
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "subjectAreaDidChange:", name: AVCaptureDeviceSubjectAreaDidChangeNotification, object: self.videoDeviceInput?.device)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(subjectAreaDidChange), name: AVCaptureDeviceSubjectAreaDidChangeNotification, object: self.videoDeviceInput?.device)
     }
     
     private func removeObserversFromInputDevice() {

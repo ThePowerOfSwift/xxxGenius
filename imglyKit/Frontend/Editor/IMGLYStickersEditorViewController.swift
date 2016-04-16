@@ -124,16 +124,16 @@ public class IMGLYStickersEditorViewController: IMGLYSubEditorViewController {
     }
     
     private func configureGestureRecognizers() {
-        let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: "panned:")
+        let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(panned))
         panGestureRecognizer.minimumNumberOfTouches = 1
         panGestureRecognizer.maximumNumberOfTouches = 1
         stickersClipView.addGestureRecognizer(panGestureRecognizer)
         
-        let pinchGestureRecognizer = UIPinchGestureRecognizer(target: self, action: "pinched:")
+        let pinchGestureRecognizer = UIPinchGestureRecognizer(target: self, action: #selector(pinched))
         pinchGestureRecognizer.delegate = self
         stickersClipView.addGestureRecognizer(pinchGestureRecognizer)
         
-        let rotationGestureRecognizer = UIRotationGestureRecognizer(target: self, action: "rotated:")
+        let rotationGestureRecognizer = UIRotationGestureRecognizer(target: self, action: #selector(rotated))
         rotationGestureRecognizer.delegate = self
         stickersClipView.addGestureRecognizer(rotationGestureRecognizer)
     }

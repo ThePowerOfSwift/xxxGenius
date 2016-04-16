@@ -77,13 +77,13 @@ public class IMGLYCircleGradientView : UIView {
     }
     
     public func configurePanGestureRecognizer() {
-        let panGestureRecognizer = UIPanGestureRecognizer(target:self, action:"handlePanGesture:")
+        let panGestureRecognizer = UIPanGestureRecognizer(target:self, action:#selector(handlePanGesture))
         addGestureRecognizer(panGestureRecognizer)
         crossImageView_.addGestureRecognizer(panGestureRecognizer)
     }
     
     public func configurePinchGestureRecognizer() {
-        let pinchGestureRecognizer = UIPinchGestureRecognizer(target:self, action:"handlePinchGesture:")
+        let pinchGestureRecognizer = UIPinchGestureRecognizer(target:self, action:#selector(handlePinchGesture))
         addGestureRecognizer(pinchGestureRecognizer)
     }
     
