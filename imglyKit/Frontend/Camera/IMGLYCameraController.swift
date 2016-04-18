@@ -95,7 +95,10 @@ public class IMGLYCameraController: NSObject {
     
     dynamic private let session = AVCaptureSession()
     private let sessionQueue = dispatch_queue_create("capture_session_queue", nil)
+    
+    // use different queue to process output frame, otherwise previous session queue will be blocked
     private let dataOutputQueue = dispatch_queue_create("data_output_queue", nil)
+    
     private var videoDeviceInput: AVCaptureDeviceInput?
     private var audioDeviceInput: AVCaptureDeviceInput?
     private var videoDataOutput: AVCaptureVideoDataOutput?
