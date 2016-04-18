@@ -95,6 +95,7 @@ public class IMGLYCameraController: NSObject {
     
     dynamic private let session = AVCaptureSession()
     private let sessionQueue = dispatch_queue_create("capture_session_queue", nil)
+    private let dataOutputQueue = dispatch_queue_create("data_output_queue", nil)
     private var videoDeviceInput: AVCaptureDeviceInput?
     private var audioDeviceInput: AVCaptureDeviceInput?
     private var videoDataOutput: AVCaptureVideoDataOutput?
@@ -872,7 +873,7 @@ public class IMGLYCameraController: NSObject {
     
     private func setupOutputs() {
         let videoDataOutput = AVCaptureVideoDataOutput()
-        videoDataOutput.setSampleBufferDelegate(self, queue: self.sessionQueue)
+        videoDataOutput.setSampleBufferDelegate(self, queue: self.dataOutputQueue)
         if self.session.canAddOutput(videoDataOutput) {
             self.session.addOutput(videoDataOutput)
             self.videoDataOutput = videoDataOutput
@@ -880,7 +881,7 @@ public class IMGLYCameraController: NSObject {
         
         if audioDeviceInput != nil {
             let audioDataOutput = AVCaptureAudioDataOutput()
-            audioDataOutput.setSampleBufferDelegate(self, queue: self.sessionQueue)
+            audioDataOutput.setSampleBufferDelegate(self, queue: self.dataOutputQueue)
             if self.session.canAddOutput(audioDataOutput) {
                 self.session.addOutput(audioDataOutput)
                 self.audioDataOutput = audioDataOutput
@@ -1339,7 +1340,9 @@ extension IMGLYCameraController: AVCaptureVideoDataOutputSampleBufferDelegate, A
         if effectFilter is IMGLYNoneFilter {
             filteredImage = sourceImage
         } else {
+            
             filteredImage = IMGLYPhotoProcessor.processWithCIImage(sourceImage, filters: [effectFilter])
+           
         }
         
         let sourceExtent = sourceImage.extent
