@@ -261,6 +261,7 @@ public class IMGLYCameraViewController: UIViewController {
         configureCameraController()
         cameraController?.squareMode = squareMode
         cameraController?.switchToRecordingMode(currentRecordingMode, animated: false)
+        completionBlock = showEditorNavigationControllerWithVideoFile
     }
     
     public override func viewWillAppear(animated: Bool) {
@@ -614,6 +615,22 @@ public class IMGLYCameraViewController: UIViewController {
         navigationController.navigationBar.titleTextAttributes = [ NSForegroundColorAttributeName : UIColor.whiteColor() ]
         
         self.presentViewController(navigationController, animated: true, completion: nil)
+    }
+    
+    private func showEditorNavigationControllerWithVideoFile(image: UIImage?, url: NSURL?) {
+        print(#function)
+        
+        if let url = url {
+            let videoEditorViewController = PGVideoEditorViewController()
+            videoEditorViewController.videoFileUrl = url
+            
+            let navigationController = IMGLYNavigationController(rootViewController: videoEditorViewController)
+            navigationController.navigationBar.barStyle = .Black
+            navigationController.navigationBar.translucent = false
+            navigationController.navigationBar.titleTextAttributes = [ NSForegroundColorAttributeName : UIColor.whiteColor() ]
+            
+            self.presentViewController(navigationController, animated: true, completion: nil)
+        }
     }
     
     private func saveMovieWithMovieURLToAssets(movieURL: NSURL) {
