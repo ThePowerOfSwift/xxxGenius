@@ -9,8 +9,8 @@
 import Foundation
 import UIKit
 
-public extension UIColor {
-    public class func toRGB(red:Double, green:Double, blue:Double, alpha:Double = 1.0) -> UIColor {
+extension UIColor {
+    class func toRGB(red:Double, green:Double, blue:Double, alpha:Double = 1.0) -> UIColor {
         return UIColor(red: CGFloat(red)/255.0, green: CGFloat(green)/255.0, blue: CGFloat(blue)/255.0, alpha: CGFloat(alpha))
     }
 }
