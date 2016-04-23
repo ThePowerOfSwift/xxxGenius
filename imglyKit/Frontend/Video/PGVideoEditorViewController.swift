@@ -17,53 +17,38 @@ public class PGVideoEditorViewController: UIViewController {
     let playerView = PGPlayerView()
     let player = AVPlayer()
     let toolsBar = UIToolbar()
-    let playControls = UIView()
+    let playControl = PGRangeSlider(frame: CGRectZero)
     
     private var playerLayer: AVPlayerLayer? {
         return playerView.playerLayer
     }
     
-//    public init() {
-//        
-////        playerView = PGPlayerView()
-//        super.init(nibName: nil, bundle: nil)
-//    }
-//    
-//    required public init?(coder aDecoder: NSCoder) {
-//        
-////        playerView = PGPlayerView()
-//        super.init(coder: aDecoder)
-//    }
-    
     override public func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = UIColor.grayColor()
+        view.backgroundColor = UIColor.toRGB(229.0, green: 224.0, blue: 221.0)
 
         // Do any additional setup after loading the view.
         navigationItem.title = "Video Editor"
         
         // setup Video Player View
         playerView.playerLayer.player = player
+        playerView.translatesAutoresizingMaskIntoConstraints = false
         playerView.backgroundColor = UIColor.redColor()
+        view.addSubview(playerView)
+        
+        // setup Play Controls
+        playControl.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(playControl)
         
         // setup Tool Bar
         toolsBar.backgroundColor = UIColor.blueColor()
-        
-        // setup Play Controls
-        playControls.backgroundColor = UIColor.greenColor()
-        playControls.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(playControls)
-        
-        // view layout
-        
-        playControls.leadingAnchor.constraintEqualToAnchor(view.leadingAnchor, constant: 0).active = true
-        playControls.trailingAnchor.constraintEqualToAnchor(view.trailingAnchor, constant: 0).active = true
-        playControls.bottomAnchor.constraintEqualToAnchor(view.bottomAnchor).active = true
-        playControls.heightAnchor.constraintEqualToConstant(20).active = true
-        
-        
-//        playControls.frame = CGRect(origin: CGPoint(x: 3,y: 3), size: CGSize(width: 100, height: 100))
+        toolsBar.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(toolsBar)
+    }
+    
+    public override func viewDidLayoutSubviews() {
+        setupViewsLayout()
     }
 
     override public func didReceiveMemoryWarning() {
@@ -71,15 +56,29 @@ public class PGVideoEditorViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    private func setupViewsLayout() {
+        
+        // Bottom ToolBar layout
+        toolsBar.leadingAnchor.constraintEqualToAnchor(view.leadingAnchor).active = true
+        toolsBar.trailingAnchor.constraintEqualToAnchor(view.trailingAnchor).active = true
+        toolsBar.bottomAnchor.constraintEqualToAnchor(view.bottomAnchor).active = true
+        toolsBar.heightAnchor.constraintEqualToConstant(40).active = true
+        
+        // video play controls layout
+        playControl.leadingAnchor.constraintEqualToAnchor(view.leadingAnchor, constant: 20).active = true
+        playControl.trailingAnchor.constraintEqualToAnchor(view.trailingAnchor, constant: -20).active = true
+        playControl.bottomAnchor.constraintEqualToAnchor(toolsBar.topAnchor).active = true
+        playControl.heightAnchor.constraintEqualToConstant(40).active = true
+        
+        // player view layout
+        playerView.leadingAnchor.constraintEqualToAnchor(view.leadingAnchor).active = true
+        playerView.trailingAnchor.constraintEqualToAnchor(view.trailingAnchor).active = true
+        playerView.bottomAnchor.constraintEqualToAnchor(playControl.topAnchor).active = true
+        playerView.topAnchor.constraintEqualToAnchor(view.topAnchor).active = true
     }
-    */
+    
+//    func setupPlayerView() {
+//        let videoPlay = UIBarButtonItem(
+//    }
 
 }
