@@ -20,6 +20,7 @@ public class PGVideoEditorViewController: UIViewController {
     let toolsBar = UIToolbar()
     let playSlider = PGRangeSlider(frame: CGRectZero)
     let videoPlayPauseButton = UIButton(frame: CGRectZero)
+    private var timeObserverToken: AnyObject?
     
     public var videoFileUrl: NSURL? {
         didSet {
@@ -57,9 +58,11 @@ public class PGVideoEditorViewController: UIViewController {
     }
     
     var duration: Double {
-        guard let currentItem = player.currentItem else { return 0.0 }
+//        guard let currentItem = player.currentItem else { return 0.0 }
+//        
+//        return CMTimeGetSeconds(currentItem.duration)
         
-        return CMTimeGetSeconds(currentItem.duration)
+        return CMTimeGetSeconds(asset!.duration)
     }
     
     var rate: Float {
@@ -80,10 +83,25 @@ public class PGVideoEditorViewController: UIViewController {
         }
     }
     
+    deinit {
+        if let playerItem = self.playerItem {
+         NSNotificationCenter.defaultCenter().removeObserver(playerItem)
+        }
+    }
+    
     public override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
         addObserver(self, forKeyPath: "player.rate", options: [.New, .Initial], context: &playerViewControllerKVOContext)
+        addObserver(self, forKeyPath: "player.currentItem.duration", options: [.New, .Initial], context: &playerViewControllerKVOContext)
+        
+        // Make sure we don't have a strong reference cycle by only capturing self as weak.
+        let interval = CMTimeMake(1, 1)
+        timeObserverToken = player.addPeriodicTimeObserverForInterval(interval, queue: dispatch_get_main_queue()) {
+            [unowned self] time in
+            
+            self.playSlider.currentValue = Double(CMTimeGetSeconds(time)/self.duration)
+        }
     }
     
     public override func viewDidDisappear(animated: Bool) {
@@ -91,7 +109,13 @@ public class PGVideoEditorViewController: UIViewController {
         
         player.pause()
         
+        if let timeObserverToken = timeObserverToken {
+            player.removeTimeObserver(timeObserverToken)
+            self.timeObserverToken = nil
+        }
+        
         removeObserver(self, forKeyPath: "player.rate", context: &playerViewControllerKVOContext)
+        removeObserver(self, forKeyPath: "player.currentItem.duration", context: &playerViewControllerKVOContext)
     }
     
     override public func viewDidLoad() {
@@ -126,6 +150,10 @@ public class PGVideoEditorViewController: UIViewController {
         toolsBar.backgroundColor = UIColor.blueColor()
         toolsBar.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(toolsBar)
+        
+        // gesture
+        let recognizer = UITapGestureRecognizer(target: self, action: #selector(handlePauseTap))
+        playerView.addGestureRecognizer(recognizer)
     }
     
     public override func viewDidLayoutSubviews() {
@@ -164,6 +192,7 @@ public class PGVideoEditorViewController: UIViewController {
         videoPlayPauseButton.widthAnchor.constraintEqualToConstant(100.0).active = true
     }
     
+    // MARK: - Control Handlers
     func videoSliderValueChange(rangeSlider: PGRangeSlider) {
         print("Slider Change: \(rangeSlider.currentValue)")
         currentTime = rangeSlider.currentValue * duration
@@ -172,6 +201,12 @@ public class PGVideoEditorViewController: UIViewController {
     func playVideo(sender: UIButton) {
         if rate == 0 {
             player.play()
+        }
+    }
+    
+    func handlePauseTap(recognizer: UITapGestureRecognizer) {
+        if rate != 0 {
+            rate = 0
         }
     }
     
@@ -276,8 +311,8 @@ public class PGVideoEditorViewController: UIViewController {
             } else {
                 videoPlayPauseButton.hidden = true
             }
+        } else if keyPath == "player.currentItem.duration" {
+            
         }
-        
     }
-
 }
