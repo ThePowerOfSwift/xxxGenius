@@ -19,7 +19,7 @@ public class PGVideoEditorViewController: UIViewController {
     let player = AVPlayer()
     let toolsBar = UIToolbar()
     let playSlider = PGRangeSlider(frame: CGRectZero)
-    let videoPlayPause = UIButton(frame: CGRectZero)
+    let videoPlayPauseButton = UIButton(frame: CGRectZero)
     
     public var videoFileUrl: NSURL? {
         didSet {
@@ -62,6 +62,16 @@ public class PGVideoEditorViewController: UIViewController {
         return CMTimeGetSeconds(currentItem.duration)
     }
     
+    var rate: Float {
+        get {
+            return player.rate
+        }
+        
+        set {
+            player.rate = newValue
+        }
+    }
+    
     var asset: AVURLAsset? {
         didSet {
             guard let newAsset = asset else { return }
@@ -101,7 +111,11 @@ public class PGVideoEditorViewController: UIViewController {
         view.addSubview(playerView)
         
         // init video play button
-        videoPlayPause.setImage(UIImage(named: "videoPlay"), forState: .Normal)
+        videoPlayPauseButton.setImage(UIImage(named: "videoPlay", inBundle: NSBundle(forClass: self.dynamicType), compatibleWithTraitCollection: nil), forState: .Normal)
+        videoPlayPauseButton.translatesAutoresizingMaskIntoConstraints = false
+        playerView.addSubview(videoPlayPauseButton)
+        
+        videoPlayPauseButton.addTarget(self, action: #selector(playVideo), forControlEvents: .TouchUpInside)
         
         // setup Play Controls
         playSlider.translatesAutoresizingMaskIntoConstraints = false
@@ -129,24 +143,36 @@ public class PGVideoEditorViewController: UIViewController {
         toolsBar.leadingAnchor.constraintEqualToAnchor(view.leadingAnchor).active = true
         toolsBar.trailingAnchor.constraintEqualToAnchor(view.trailingAnchor).active = true
         toolsBar.bottomAnchor.constraintEqualToAnchor(view.bottomAnchor).active = true
-        toolsBar.heightAnchor.constraintEqualToConstant(40).active = true
+        toolsBar.heightAnchor.constraintEqualToConstant(40.0).active = true
         
         // video play controls layout
         playSlider.leadingAnchor.constraintEqualToAnchor(view.leadingAnchor, constant: 20).active = true
         playSlider.trailingAnchor.constraintEqualToAnchor(view.trailingAnchor, constant: -20).active = true
         playSlider.bottomAnchor.constraintEqualToAnchor(toolsBar.topAnchor).active = true
-        playSlider.heightAnchor.constraintEqualToConstant(40).active = true
+        playSlider.heightAnchor.constraintEqualToConstant(40.0).active = true
         
         // player view layout
         playerView.leadingAnchor.constraintEqualToAnchor(view.leadingAnchor).active = true
         playerView.trailingAnchor.constraintEqualToAnchor(view.trailingAnchor).active = true
         playerView.bottomAnchor.constraintEqualToAnchor(playSlider.topAnchor).active = true
         playerView.topAnchor.constraintEqualToAnchor(view.topAnchor).active = true
+        
+        // video play/pause button
+        videoPlayPauseButton.centerXAnchor.constraintEqualToAnchor(playerView.centerXAnchor).active = true
+        videoPlayPauseButton.centerYAnchor.constraintEqualToAnchor(playerView.centerYAnchor).active = true
+        videoPlayPauseButton.heightAnchor.constraintEqualToConstant(100.0).active = true
+        videoPlayPauseButton.widthAnchor.constraintEqualToConstant(100.0).active = true
     }
     
     func videoSliderValueChange(rangeSlider: PGRangeSlider) {
         print("Slider Change: \(rangeSlider.currentValue)")
         currentTime = rangeSlider.currentValue * duration
+    }
+    
+    func playVideo(sender: UIButton) {
+        if rate == 0 {
+            player.play()
+        }
     }
     
     func asynchronouslyLoadURLAsset(newAsset: AVURLAsset) {
@@ -201,9 +227,15 @@ public class PGVideoEditorViewController: UIViewController {
                  it our player's current item.
                  */
                 self.playerItem = AVPlayerItem(asset: newAsset)
+                
+                NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.playerItemDidReachEnd), name:AVPlayerItemDidPlayToEndTimeNotification, object: self.playerItem)
             }
         }
 
+    }
+    
+    func playerItemDidReachEnd(notification: NSNotification) {
+        self.player.seekToTime(kCMTimeZero)
     }
     
     
@@ -239,13 +271,13 @@ public class PGVideoEditorViewController: UIViewController {
         if keyPath == "player.rate" {
             let newRate = (change?[NSKeyValueChangeNewKey] as! NSNumber).doubleValue
             
-            
+            if newRate == 0 {
+                videoPlayPauseButton.hidden = false
+            } else {
+                videoPlayPauseButton.hidden = true
+            }
         }
         
     }
-    
-//    func setupPlayerView() {
-//        let videoPlay = UIBarButtonItem(
-//    }
 
 }
