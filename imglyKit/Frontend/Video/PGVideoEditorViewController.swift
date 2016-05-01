@@ -147,9 +147,14 @@ public class PGVideoEditorViewController: UIViewController {
         playSlider.addTarget(self, action: #selector(videoSliderValueChange), forControlEvents: .ValueChanged)
         
         // setup Tool Bar
-        toolsBar.backgroundColor = UIColor.blueColor()
+        toolsBar.tintColor = UIColor.whiteColor()
+        toolsBar.barTintColor = UIColor.blackColor()
         toolsBar.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(toolsBar)
+        
+        let playFastSlowItem = UIBarButtonItem(image: UIImage(named: "time108"), style: .Plain, target: nil, action: #selector(showPlayFastSlow))
+        
+        toolsBar.setItems([playFastSlowItem], animated: true)
         
         // gesture
         let recognizer = UITapGestureRecognizer(target: self, action: #selector(handlePauseTap))
@@ -171,7 +176,7 @@ public class PGVideoEditorViewController: UIViewController {
         toolsBar.leadingAnchor.constraintEqualToAnchor(view.leadingAnchor).active = true
         toolsBar.trailingAnchor.constraintEqualToAnchor(view.trailingAnchor).active = true
         toolsBar.bottomAnchor.constraintEqualToAnchor(view.bottomAnchor).active = true
-        toolsBar.heightAnchor.constraintEqualToConstant(40.0).active = true
+        toolsBar.heightAnchor.constraintEqualToConstant(50.0).active = true
         
         // video play controls layout
         playSlider.leadingAnchor.constraintEqualToAnchor(view.leadingAnchor, constant: 20).active = true
@@ -208,6 +213,10 @@ public class PGVideoEditorViewController: UIViewController {
         if rate != 0 {
             rate = 0
         }
+    }
+    
+    func showPlayFastSlow() {
+        print(#function)
     }
     
     func asynchronouslyLoadURLAsset(newAsset: AVURLAsset) {
