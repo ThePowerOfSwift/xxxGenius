@@ -9,6 +9,12 @@
 import Foundation
 import AVFoundation
 import UIKit
+import SnapKit
+
+enum PGLayoutStyle: Int {
+    case Init
+    case FastSlow
+}
 
 
 private var playerViewControllerKVOContext = 0
@@ -18,6 +24,7 @@ public class PGVideoEditorViewController: UIViewController {
     let playerView = PGPlayerView()
     let player = AVPlayer()
     let toolsBar = UIToolbar()
+    let fastSlowToolBar = UIToolbar()
     let playSlider = PGRangeSlider(frame: CGRectZero)
     let videoPlayPauseButton = UIButton(frame: CGRectZero)
     private var timeObserverToken: AnyObject?
@@ -89,6 +96,26 @@ public class PGVideoEditorViewController: UIViewController {
         }
     }
     
+    var layoutStyle: PGLayoutStyle? {
+        didSet {
+            if let style = layoutStyle {
+                switch style {
+                case .Init:
+                    print("Layout Init")
+                    initViewsLayout()
+                    
+                case .FastSlow:
+                    print("Layout FastSlow")
+                    updateViewsLayout()
+                }
+            }
+            
+            UIView.animateWithDuration(0.5, animations: {
+                self.view.layoutIfNeeded()
+            })
+        }
+    }
+    
     public override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
@@ -102,6 +129,9 @@ public class PGVideoEditorViewController: UIViewController {
             
             self.playSlider.currentValue = Double(CMTimeGetSeconds(time)/self.duration)
         }
+        
+        // initialize view layout
+        layoutStyle = PGLayoutStyle.Init
     }
     
     public override func viewDidDisappear(animated: Bool) {
@@ -156,45 +186,83 @@ public class PGVideoEditorViewController: UIViewController {
         
         toolsBar.setItems([playFastSlowItem], animated: true)
         
+        // fast slow control bar
+        fastSlowToolBar.translatesAutoresizingMaskIntoConstraints = false
+        fastSlowToolBar.barTintColor = UIColor.greenColor()
+        view.addSubview(fastSlowToolBar)
+        
         // gesture
         let recognizer = UITapGestureRecognizer(target: self, action: #selector(handlePauseTap))
         playerView.addGestureRecognizer(recognizer)
     }
-    
-    public override func viewDidLayoutSubviews() {
-        setupViewsLayout()
-    }
+
 
     override public func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
-    private func setupViewsLayout() {
+    // MARK: - Layout Update
+    
+    private func initViewsLayout() {
+        print(#function)
         
         // Bottom ToolBar layout
-        toolsBar.leadingAnchor.constraintEqualToAnchor(view.leadingAnchor).active = true
-        toolsBar.trailingAnchor.constraintEqualToAnchor(view.trailingAnchor).active = true
-        toolsBar.bottomAnchor.constraintEqualToAnchor(view.bottomAnchor).active = true
-        toolsBar.heightAnchor.constraintEqualToConstant(50.0).active = true
+        toolsBar.snp_remakeConstraints { (make) in
+            make.left.equalTo(view)
+            make.right.equalTo(view)
+            make.height.equalTo(50.0)
+            make.bottom.equalTo(view)
+        }
         
         // video play controls layout
-        playSlider.leadingAnchor.constraintEqualToAnchor(view.leadingAnchor, constant: 20).active = true
-        playSlider.trailingAnchor.constraintEqualToAnchor(view.trailingAnchor, constant: -20).active = true
-        playSlider.bottomAnchor.constraintEqualToAnchor(toolsBar.topAnchor).active = true
-        playSlider.heightAnchor.constraintEqualToConstant(40.0).active = true
+        playSlider.snp_remakeConstraints { (make) in
+            make.left.equalTo(view).offset(20.0)
+            make.right.equalTo(view).offset(-20.0)
+            make.bottom.equalTo(toolsBar.snp_top)
+            make.height.equalTo(40.0)
+        }
         
         // player view layout
-        playerView.leadingAnchor.constraintEqualToAnchor(view.leadingAnchor).active = true
-        playerView.trailingAnchor.constraintEqualToAnchor(view.trailingAnchor).active = true
-        playerView.bottomAnchor.constraintEqualToAnchor(playSlider.topAnchor).active = true
-        playerView.topAnchor.constraintEqualToAnchor(view.topAnchor).active = true
+        playerView.snp_remakeConstraints { (make) in
+            make.left.equalTo(view)
+            make.right.equalTo(view)
+            make.top.equalTo(view)
+            make.bottom.equalTo(playSlider.snp_top)
+        }
         
         // video play/pause button
-        videoPlayPauseButton.centerXAnchor.constraintEqualToAnchor(playerView.centerXAnchor).active = true
-        videoPlayPauseButton.centerYAnchor.constraintEqualToAnchor(playerView.centerYAnchor).active = true
-        videoPlayPauseButton.heightAnchor.constraintEqualToConstant(100.0).active = true
-        videoPlayPauseButton.widthAnchor.constraintEqualToConstant(100.0).active = true
+        videoPlayPauseButton.snp_remakeConstraints { (make) in
+            make.size.equalTo(100.0)
+            make.center.equalTo(view)
+        }
+        
+        // FastSlow ToolBar
+        fastSlowToolBar.snp_remakeConstraints { (make) in
+            make.left.equalTo(view)
+            make.right.equalTo(view)
+            make.height.equalTo(50.0)
+            make.bottom.equalTo(view).offset(50.0)
+        }
+    }
+    
+    private func updateViewsLayout() {
+        print(#function)
+        
+        toolsBar.snp_updateConstraints { (make) in
+            make.bottom.equalTo(view).offset(50.0)
+        }
+        
+        playSlider.snp_remakeConstraints { (make) in
+            make.left.equalTo(view).offset(20.0)
+            make.right.equalTo(view).offset(-20.0)
+            make.bottom.equalTo(fastSlowToolBar.snp_top)
+            make.height.equalTo(40.0)
+        }
+        
+        fastSlowToolBar.snp_updateConstraints { (make) in
+            make.bottom.equalTo(view)
+        }
     }
     
     // MARK: - Control Handlers
@@ -217,6 +285,7 @@ public class PGVideoEditorViewController: UIViewController {
     
     func showPlayFastSlow() {
         print(#function)
+        layoutStyle = PGLayoutStyle.FastSlow
     }
     
     func asynchronouslyLoadURLAsset(newAsset: AVURLAsset) {

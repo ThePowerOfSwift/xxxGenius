@@ -12,6 +12,9 @@
 		2BF4D7881AF11E2E00C801B2 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2BF4D7871AF11E2E00C801B2 /* Images.xcassets */; };
 		2BF4D78B1AF11E2E00C801B2 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2BF4D7891AF11E2E00C801B2 /* LaunchScreen.xib */; };
 		2BF4D7C01AF11F7200C801B2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BF4D7BF1AF11F7200C801B2 /* AppDelegate.swift */; };
+		63AB1E881CD9C8F1007604B7 /* SnapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63AB1E871CD9C8F1007604B7 /* SnapKit.framework */; };
+		63AB1E8A1CD9C983007604B7 /* SnapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63AB1E871CD9C8F1007604B7 /* SnapKit.framework */; };
+		63AB1E8B1CD9C983007604B7 /* SnapKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 63AB1E871CD9C8F1007604B7 /* SnapKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,6 +49,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				2B3A5D911B2F095200CCF99B /* imglyKit.framework in Embed Frameworks */,
+				63AB1E8B1CD9C983007604B7 /* SnapKit.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -59,6 +63,7 @@
 		2BF4D78A1AF11E2E00C801B2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		2BF4D7B41AF11ED100C801B2 /* imglyKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = imglyKit.xcodeproj; path = ../imglyKit.xcodeproj; sourceTree = "<group>"; };
 		2BF4D7BF1AF11F7200C801B2 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		63AB1E871CD9C8F1007604B7 /* SnapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SnapKit.framework; path = "../../../../Library/Developer/Xcode/DerivedData/imglyKit-fhrnqwaczkkbgtcbleaagxsqcvny/Build/Products/Debug-iphoneos/SnapKit.framework"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,6 +71,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				63AB1E8A1CD9C983007604B7 /* SnapKit.framework in Frameworks */,
+				63AB1E881CD9C8F1007604B7 /* SnapKit.framework in Frameworks */,
 				2B3A5D901B2F095200CCF99B /* imglyKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -85,6 +92,7 @@
 		2BF4D7721AF11E2E00C801B2 = {
 			isa = PBXGroup;
 			children = (
+				63AB1E871CD9C8F1007604B7 /* SnapKit.framework */,
 				2BF4D77D1AF11E2E00C801B2 /* iOS Example */,
 				2BF4D7B41AF11ED100C801B2 /* imglyKit.xcodeproj */,
 				2BF4D77C1AF11E2E00C801B2 /* Products */,
