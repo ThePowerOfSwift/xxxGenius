@@ -253,6 +253,8 @@ public class PGVideoEditorViewController: UIViewController {
             make.bottom.equalTo(view).offset(50.0)
         }
         
+        // snp_updateConstraints can only update 'constant'
+        // so can only use snp_remakeConstraints
         playSlider.snp_remakeConstraints { (make) in
             make.left.equalTo(view).offset(20.0)
             make.right.equalTo(view).offset(-20.0)
