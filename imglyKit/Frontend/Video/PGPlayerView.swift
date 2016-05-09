@@ -4,28 +4,29 @@
 	
 	Abstract:
 	Player view backed by an PGAVPlayerLayer.
-*/
+ */
 
 import UIKit
 import AVFoundation
 
 /// A simple `UIView` subclass that is backed by an `PGAVPlayerLayer` layer.
 class PGPlayerView: UIView {
-    var player: AVPlayer? {
-        get {
-            return playerLayer.player
-        }
-        
-        set {
-            playerLayer.player = newValue
-        }
+  var player: AVPlayer? {
+    get {
+      return playerLayer.player
     }
     
-    var playerLayer: AVPlayerLayer {
-        return layer as! AVPlayerLayer
+    
+    set {
+      playerLayer.player = newValue
     }
-
-    override class func layerClass() -> AnyClass {
-        return AVPlayerLayer.self
-    }
+  }
+  
+  var playerLayer: AVPlayerLayer {
+    return layer as! AVPlayerLayer
+  }
+  
+  override class func layerClass() -> AnyClass {
+    return AVPlayerLayer.self
+  }
 }

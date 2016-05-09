@@ -155,7 +155,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftMigration = 0700;
-				LastSwiftUpdateCheck = 0700;
+				LastSwiftUpdateCheck = 0730;
 				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = "9elements GmbH";
 				TargetAttributes = {
@@ -347,6 +347,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.9elements.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "iOS Example";
 				PROVISIONING_PROFILE = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -364,6 +365,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.9elements.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "iOS Example";
 				PROVISIONING_PROFILE = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 			};
 			name = Release;
 		};
