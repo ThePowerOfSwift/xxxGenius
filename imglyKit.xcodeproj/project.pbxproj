@@ -380,6 +380,8 @@
 		6343D8631CCB2D1700288459 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6343D8621CCB2D1700288459 /* Utils.swift */; };
 		63AB1E9D1CDF8CE3007604B7 /* HUMSlider.h in Headers */ = {isa = PBXBuildFile; fileRef = 63AB1E9B1CDF8CE3007604B7 /* HUMSlider.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		63AB1E9E1CDF8CE3007604B7 /* HUMSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 63AB1E9C1CDF8CE3007604B7 /* HUMSlider.m */; };
+		63D64FC81CE1D8F10037C594 /* ToolbarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D64FC71CE1D8F10037C594 /* ToolbarController.swift */; };
+		63D64FCB1CE1F82D0037C594 /* FastSlowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D64FCA1CE1F82D0037C594 /* FastSlowController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -599,6 +601,8 @@
 		6343D8621CCB2D1700288459 /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		63AB1E9B1CDF8CE3007604B7 /* HUMSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HUMSlider.h; sourceTree = "<group>"; };
 		63AB1E9C1CDF8CE3007604B7 /* HUMSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HUMSlider.m; sourceTree = "<group>"; };
+		63D64FC71CE1D8F10037C594 /* ToolbarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ToolbarController.swift; path = Controllers/ToolbarController.swift; sourceTree = "<group>"; };
+		63D64FCA1CE1F82D0037C594 /* FastSlowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FastSlowController.swift; path = Controllers/FastSlowController.swift; sourceTree = "<group>"; };
 		7285EA730E5D5CB6AAD92394 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		CD3D1CAE5B7CB3F6A0D5F156 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		DD8D604303941FF4C08B09B2 /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -626,6 +630,7 @@
 		2B1ADA0B1B19C33600C98522 /* Frontend */ = {
 			isa = PBXGroup;
 			children = (
+				63D64FC91CE1F8010037C594 /* Controllers */,
 				63AB1E9A1CDF8CE3007604B7 /* Slider */,
 				633298A91CC75CD400CAC059 /* Video */,
 				2BF4D3A71AF114F000C801B2 /* Assets.xcassets */,
@@ -965,6 +970,15 @@
 				63AB1E9C1CDF8CE3007604B7 /* HUMSlider.m */,
 			);
 			path = Slider;
+			sourceTree = "<group>";
+		};
+		63D64FC91CE1F8010037C594 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				63D64FC71CE1D8F10037C594 /* ToolbarController.swift */,
+				63D64FCA1CE1F82D0037C594 /* FastSlowController.swift */,
+			);
+			name = Controllers;
 			sourceTree = "<group>";
 		};
 		7A70D7D779B87AE7F85A765E /* Frameworks */ = {
@@ -1482,6 +1496,7 @@
 				6343D85D1CCB1D1700288459 /* PGRangeSliderThumbLayer.swift in Sources */,
 				2BF4D3E91AF1150500C801B2 /* IMGLYTextColorSelectorView.swift in Sources */,
 				2BF4D5191AF1155E00C801B2 /* IMGLYLeninFilter.swift in Sources */,
+				63D64FC81CE1D8F10037C594 /* ToolbarController.swift in Sources */,
 				2BF4D3D71AF1150500C801B2 /* IMGLYFilterEditorViewController.swift in Sources */,
 				2BF4D50B1AF1155E00C801B2 /* IMGLYEveningFilter.swift in Sources */,
 				2BF4D4B01AF1154B00C801B2 /* IMGLYStickerFilter.swift in Sources */,
@@ -1498,6 +1513,7 @@
 				2BF4D5171AF1155E00C801B2 /* IMGLYKDynamicFilter.swift in Sources */,
 				2BF4D5041AF1155E00C801B2 /* IMGLYColorfulFilter.swift in Sources */,
 				2BF4D5281AF1155E00C801B2 /* IMGLYPolaSXFIlter.swift in Sources */,
+				63D64FCB1CE1F82D0037C594 /* FastSlowController.swift in Sources */,
 				2BF4D3E81AF1150500C801B2 /* IMGLYSubEditorViewController.swift in Sources */,
 				2BF4D5121AF1155E00C801B2 /* IMGLYGobblinFilter.swift in Sources */,
 				2BF4D5251AF1155E00C801B2 /* IMGLYPitchedFilter.swift in Sources */,

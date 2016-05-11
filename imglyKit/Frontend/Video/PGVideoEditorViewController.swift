@@ -11,23 +11,29 @@ import AVFoundation
 import UIKit
 import SnapKit
 
-enum PGLayoutStyle: Int {
-  case Init
-  case FastSlow
-}
-
 
 private var playerViewControllerKVOContext = 0
 
 public class PGVideoEditorViewController: UIViewController {
   
+  // define constants
+  enum FeatureViewHeight {
+    static let toolbar  = 50.0
+    static let fastSlow = 150.0
+  }
+  
   let playerView = PGPlayerView()
   let player = AVPlayer()
-  let toolsBar = UIToolbar()
-  let fastSlowToolBar = UIToolbar()
+  let containedView = UIView()
+  let fastSlowToolBar = HUMSlider()
   let playSlider = PGRangeSlider(frame: CGRectZero)
   let videoPlayPauseButton = UIButton(frame: CGRectZero)
+  let containerView = UIView()
   private var timeObserverToken: AnyObject?
+  
+  // Controllers
+  let toobarController = ToolbarController()
+  let fastslowController = FastSlowController()
   
   public var videoFileUrl: NSURL? {
     didSet {
@@ -65,10 +71,6 @@ public class PGVideoEditorViewController: UIViewController {
   }
   
   var duration: Double {
-    //        guard let currentItem = player.currentItem else { return 0.0 }
-    //
-    //        return CMTimeGetSeconds(currentItem.duration)
-    
     return CMTimeGetSeconds(asset!.duration)
   }
   
@@ -96,23 +98,17 @@ public class PGVideoEditorViewController: UIViewController {
     }
   }
   
-  var layoutStyle: PGLayoutStyle? {
+  var layoutStyle: ToobarSelectedFeature? {
     didSet {
       if let style = layoutStyle {
         switch style {
-        case .Init:
-          print("Layout Init")
-          initViewsLayout()
-          
         case .FastSlow:
           print("Layout FastSlow")
-          updateViewsLayout()
+          fastslowController.delegate = self
+          updateContainedViewHeight(FeatureViewHeight.fastSlow)
+          flipViewController(toobarController, toController: fastslowController, direction: .CurveEaseIn)
         }
       }
-      
-      UIView.animateWithDuration(0.5, animations: {
-        self.view.layoutIfNeeded()
-      })
     }
   }
   
@@ -131,7 +127,7 @@ public class PGVideoEditorViewController: UIViewController {
     }
     
     // initialize view layout
-    layoutStyle = PGLayoutStyle.Init
+    initViewsLayout()
   }
   
   public override func viewDidDisappear(animated: Bool) {
@@ -152,6 +148,9 @@ public class PGVideoEditorViewController: UIViewController {
     super.viewDidLoad()
     
     view.backgroundColor = UIColor.toRGB(229.0, green: 224.0, blue: 221.0)
+    
+    // setup container view
+    containerView.backgroundColor = UIColor.magentaColor()
     
     // Do any additional setup after loading the view.
     navigationItem.title = "Video Editor"
@@ -176,20 +175,13 @@ public class PGVideoEditorViewController: UIViewController {
     view.addSubview(playSlider)
     playSlider.addTarget(self, action: #selector(videoSliderValueChange), forControlEvents: .ValueChanged)
     
-    // setup Tool Bar
-    toolsBar.tintColor = UIColor.whiteColor()
-    toolsBar.barTintColor = UIColor.blackColor()
-    toolsBar.translatesAutoresizingMaskIntoConstraints = false
-    view.addSubview(toolsBar)
-    
-    let playFastSlowItem = UIBarButtonItem(image: UIImage(named: "time108"), style: .Plain, target: nil, action: #selector(showPlayFastSlow))
-    
-    toolsBar.setItems([playFastSlowItem], animated: true)
+    // setup Contained View and init with ToolbarController
+    view.addSubview(containedView)
+    displayInContainedController(toobarController)
+    toobarController.delegate = self
     
     // fast slow control bar
-    fastSlowToolBar.translatesAutoresizingMaskIntoConstraints = false
-    fastSlowToolBar.barTintColor = UIColor.greenColor()
-    view.addSubview(fastSlowToolBar)
+    setupFastSlowView()
     
     // gesture
     let recognizer = UITapGestureRecognizer(target: self, action: #selector(handlePauseTap))
@@ -202,13 +194,47 @@ public class PGVideoEditorViewController: UIViewController {
     // Dispose of any resources that can be recreated.
   }
   
+  // MARK: - Setup Subviews
+  
+  func setupFastSlowView() {
+    fastSlowToolBar.translatesAutoresizingMaskIntoConstraints = false
+    view.addSubview(fastSlowToolBar)
+  }
+  
+  // MARK: - Child Controller
+  
+  func displayInContainedController(controller: UIViewController) {
+    self.addChildViewController(controller)
+    controller.view.frame = containedView.bounds
+    containedView.addSubview(controller.view)
+    controller.didMoveToParentViewController(self)
+  }
+  
+  func flipViewController(fromController: UIViewController, toController: UIViewController, direction: UIViewAnimationOptions) {
+    
+    toController.view.frame = fromController.view.bounds
+    addChildViewController(toController)
+    fromController.willMoveToParentViewController(nil)
+    
+    transitionFromViewController(fromController, toViewController: toController, duration: 1.2, options: direction, animations: nil) { (Bool) in
+      toController.didMoveToParentViewController(self)
+      fromController.removeFromParentViewController()
+    }
+  }
+  
+  func returnToToolbarController(fromController: UIViewController) {
+    toobarController.delegate = self
+    updateContainedViewHeight(FeatureViewHeight.toolbar)
+    flipViewController(fromController, toController: toobarController, direction: .CurveEaseIn)
+  }
+  
   // MARK: - Layout Update
   
   private func initViewsLayout() {
     print(#function)
     
     // Bottom ToolBar layout
-    toolsBar.snp_remakeConstraints { (make) in
+    containedView.snp_remakeConstraints { (make) in
       make.left.equalTo(view)
       make.right.equalTo(view)
       make.height.equalTo(50.0)
@@ -219,7 +245,7 @@ public class PGVideoEditorViewController: UIViewController {
     playSlider.snp_remakeConstraints { (make) in
       make.left.equalTo(view).offset(20.0)
       make.right.equalTo(view).offset(-20.0)
-      make.bottom.equalTo(toolsBar.snp_top)
+      make.bottom.equalTo(containedView.snp_top)
       make.height.equalTo(40.0)
     }
     
@@ -246,25 +272,16 @@ public class PGVideoEditorViewController: UIViewController {
     }
   }
   
-  private func updateViewsLayout() {
+  private func updateContainedViewHeight(height: Double) {
     print(#function)
     
-    toolsBar.snp_updateConstraints { (make) in
-      make.bottom.equalTo(view).offset(50.0)
+    containedView.snp_updateConstraints { (make) in
+      make.height.equalTo(height)
     }
     
-    // snp_updateConstraints can only update 'constant'
-    // so can only use snp_remakeConstraints
-    playSlider.snp_remakeConstraints { (make) in
-      make.left.equalTo(view).offset(20.0)
-      make.right.equalTo(view).offset(-20.0)
-      make.bottom.equalTo(fastSlowToolBar.snp_top)
-      make.height.equalTo(40.0)
-    }
-    
-    fastSlowToolBar.snp_updateConstraints { (make) in
-      make.bottom.equalTo(view)
-    }
+    UIView.animateWithDuration(0.5, animations: {
+      self.view.layoutIfNeeded()
+    })
   }
   
   // MARK: - Control Handlers
@@ -287,7 +304,7 @@ public class PGVideoEditorViewController: UIViewController {
   
   func showPlayFastSlow() {
     print(#function)
-    layoutStyle = PGLayoutStyle.FastSlow
+    layoutStyle = ToobarSelectedFeature.FastSlow
   }
   
   func asynchronouslyLoadURLAsset(newAsset: AVURLAsset) {
@@ -394,5 +411,24 @@ public class PGVideoEditorViewController: UIViewController {
     } else if keyPath == "player.currentItem.duration" {
       
     }
+  }
+}
+
+// MARK: - ToolbarControllerDelegate
+
+extension PGVideoEditorViewController: ToolbarControllerDelegate {
+  func selectedFeature(feature: ToobarSelectedFeature) {
+    print(#function)
+    layoutStyle = feature
+  }
+}
+
+// MARK: - FastSlowControllerDelegate
+
+extension PGVideoEditorViewController: FastSlowControllerDelegate {
+  func featureClose() {
+    
+    // show main Toolbar Control
+    returnToToolbarController(fastslowController)
   }
 }
