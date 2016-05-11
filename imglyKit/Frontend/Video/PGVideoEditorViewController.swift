@@ -225,7 +225,7 @@ public class PGVideoEditorViewController: UIViewController {
   func returnToToolbarController(fromController: UIViewController) {
     toobarController.delegate = self
     updateContainedViewHeight(FeatureViewHeight.toolbar)
-    flipViewController(fromController, toController: toobarController, direction: .CurveEaseIn)
+    flipViewController(fromController, toController: toobarController, direction: .CurveEaseInOut)
   }
   
   // MARK: - Layout Update
@@ -260,7 +260,7 @@ public class PGVideoEditorViewController: UIViewController {
     // video play/pause button
     videoPlayPauseButton.snp_remakeConstraints { (make) in
       make.size.equalTo(100.0)
-      make.center.equalTo(view)
+      make.center.equalTo(playerView)
     }
     
     // FastSlow ToolBar
