@@ -19,13 +19,12 @@ public class PGVideoEditorViewController: UIViewController {
   // define constants
   enum FeatureViewHeight {
     static let toolbar  = 50.0
-    static let fastSlow = 150.0
+    static let fastSlow = 50.0
   }
   
   let playerView = PGPlayerView()
   let player = AVPlayer()
   let containedView = UIView()
-  let fastSlowToolBar = HUMSlider()
   let playSlider = PGRangeSlider(frame: CGRectZero)
   let videoPlayPauseButton = UIButton(frame: CGRectZero)
   let containerView = UIView()
@@ -180,9 +179,6 @@ public class PGVideoEditorViewController: UIViewController {
     displayInContainedController(toobarController)
     toobarController.delegate = self
     
-    // fast slow control bar
-    setupFastSlowView()
-    
     // gesture
     let recognizer = UITapGestureRecognizer(target: self, action: #selector(handlePauseTap))
     playerView.addGestureRecognizer(recognizer)
@@ -192,13 +188,6 @@ public class PGVideoEditorViewController: UIViewController {
   override public func didReceiveMemoryWarning() {
     super.didReceiveMemoryWarning()
     // Dispose of any resources that can be recreated.
-  }
-  
-  // MARK: - Setup Subviews
-  
-  func setupFastSlowView() {
-    fastSlowToolBar.translatesAutoresizingMaskIntoConstraints = false
-    view.addSubview(fastSlowToolBar)
   }
   
   // MARK: - Child Controller
@@ -261,14 +250,6 @@ public class PGVideoEditorViewController: UIViewController {
     videoPlayPauseButton.snp_remakeConstraints { (make) in
       make.size.equalTo(100.0)
       make.center.equalTo(playerView)
-    }
-    
-    // FastSlow ToolBar
-    fastSlowToolBar.snp_remakeConstraints { (make) in
-      make.left.equalTo(view)
-      make.right.equalTo(view)
-      make.height.equalTo(50.0)
-      make.bottom.equalTo(view).offset(50.0)
     }
   }
   
