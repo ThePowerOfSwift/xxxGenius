@@ -10,6 +10,7 @@ import UIKit
 
 protocol FastSlowControllerDelegate {
   func featureClose()
+  func updateVideoSpeed(speed: Float)
 }
 
 class FastSlowController: UIViewController {
@@ -47,9 +48,6 @@ class FastSlowController: UIViewController {
     
     view.addSubview(speedSlider)
     
-//    speedSlider.layer.borderWidth = 2
-//    speedSlider.layer.borderColor = UIColor.redColor().CGColor
-    
     // Speed Label
     speedLabel.translatesAutoresizingMaskIntoConstraints = false
     speedLabel.textColor = FlatUIColors.carrotColor()
@@ -69,6 +67,8 @@ class FastSlowController: UIViewController {
   func valueChanged(sender: UISlider) {
     let speed = sender.value
     speedLabel.text = String(format: "%@%.1f", "x", speed)
+    
+    delegate?.updateVideoSpeed(speed)
   }
   
   func setupLayouts () {

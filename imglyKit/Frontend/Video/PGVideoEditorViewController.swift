@@ -11,7 +11,6 @@ import AVFoundation
 import UIKit
 import SnapKit
 
-
 private var playerViewControllerKVOContext = 0
 
 public class PGVideoEditorViewController: UIViewController {
@@ -21,7 +20,7 @@ public class PGVideoEditorViewController: UIViewController {
     static let toolbar  = 50.0
     static let fastSlow = 50.0
   }
-  
+
   let playerView = PGPlayerView()
   let player = AVPlayer()
   let containedView = UIView()
@@ -73,6 +72,12 @@ public class PGVideoEditorViewController: UIViewController {
     return CMTimeGetSeconds(asset!.duration)
   }
   
+  var videoSpeed: Float = 1.0 {
+    didSet {
+      player.rate = videoSpeed
+    }
+  }
+  
   var rate: Float {
     get {
       return player.rate
@@ -88,6 +93,11 @@ public class PGVideoEditorViewController: UIViewController {
       guard let newAsset = asset else { return }
       
       asynchronouslyLoadURLAsset(newAsset)
+      
+      let track = asset?.tracksWithMediaType(AVMediaTypeVideo)[0]
+      
+      print(asset?.preferredTransform)
+      print(track?.preferredTransform)
     }
   }
   
@@ -123,6 +133,8 @@ public class PGVideoEditorViewController: UIViewController {
       [unowned self] time in
       
       self.playSlider.currentValue = Double(CMTimeGetSeconds(time)/self.duration)
+      
+      print(self.player.rate)
     }
     
     // initialize view layout
@@ -273,7 +285,7 @@ public class PGVideoEditorViewController: UIViewController {
   
   func playVideo(sender: UIButton) {
     if rate == 0 {
-      player.play()
+      rate = videoSpeed
     }
   }
   
@@ -411,5 +423,9 @@ extension PGVideoEditorViewController: FastSlowControllerDelegate {
     
     // show main Toolbar Control
     returnToToolbarController(fastslowController)
+  }
+  
+  func updateVideoSpeed(speed: Float) {
+    videoSpeed = speed
   }
 }
