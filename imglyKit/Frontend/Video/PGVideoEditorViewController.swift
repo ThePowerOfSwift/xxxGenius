@@ -21,13 +21,39 @@ public class PGVideoEditorViewController: UIViewController {
     static let fastSlow = 50.0
   }
 
-  let playerView = PGPlayerView()
-  let player = AVPlayer()
+  lazy var playerView:PGPlayerView = PGPlayerView()
+  lazy var player = AVPlayer()
   let containedView = UIView()
   let playSlider = PGRangeSlider(frame: CGRectZero)
   let videoPlayPauseButton = UIButton(frame: CGRectZero)
   let containerView = UIView()
   private var timeObserverToken: AnyObject?
+  
+  // Video Composition/Instruction/Layer Init
+  lazy var mixComposition = AVMutableComposition()
+  var assetVideoTrack: AVAssetTrack? {
+    return self.asset?.tracksWithMediaType(AVMediaTypeVideo).first
+  }
+  
+  lazy var videoTrack: AVMutableCompositionTrack = {
+    let track: AVMutableCompositionTrack = self.mixComposition.addMutableTrackWithMediaType(AVMediaTypeVideo, preferredTrackID: kCMPersistentTrackID_Invalid)
+    try! track.insertTimeRange(CMTimeRange(start: kCMTimeZero, duration: self.asset!.duration), ofTrack: self.assetVideoTrack!, atTime: kCMTimeZero)
+    return track
+  } ()
+  
+  lazy var mainVideoComposition = AVMutableVideoComposition()
+  
+  lazy var mainInstruction: AVMutableVideoCompositionInstruction = {
+    let instruction = AVMutableVideoCompositionInstruction()
+    instruction.timeRange = CMTimeRange(start: kCMTimeZero, duration: self.asset!.duration)
+    return instruction
+  } ()
+  
+  lazy var videolayerInstruction: AVMutableVideoCompositionLayerInstruction = {
+    let layerInstruction = AVMutableVideoCompositionLayerInstruction(assetTrack: self.videoTrack)
+    layerInstruction.setTransform((self.assetVideoTrack?.preferredTransform)!, atTime: kCMTimeZero)
+    return layerInstruction
+  } ()
   
   // Controllers
   let toobarController = ToolbarController()
@@ -48,12 +74,15 @@ public class PGVideoEditorViewController: UIViewController {
   }
   
   private var playerItem: AVPlayerItem? = nil {
+    willSet {
+      if let item = playerItem {
+        NSNotificationCenter.defaultCenter().removeObserver(item)
+      }
+    }
+    
     didSet {
-      /*
-       If needed, configure player item here before associating it with a player.
-       (example: adding outputs, setting text style rules, selecting media options)
-       */
-      player.replaceCurrentItemWithPlayerItem(self.playerItem)
+      player.replaceCurrentItemWithPlayerItem(playerItem)
+      NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(playerItemDidReachEnd), name:AVPlayerItemDidPlayToEndTimeNotification, object: playerItem)
     }
   }
   
@@ -74,7 +103,22 @@ public class PGVideoEditorViewController: UIViewController {
   
   var videoSpeed: Float = 1.0 {
     didSet {
-      player.rate = videoSpeed
+      // update video speed in Player
+      let timeRange = CMTimeRange(start: kCMTimeZero, duration: self.asset!.duration)
+      let scaledTime = CMTimeMultiplyByFloat64(self.asset!.duration, Double(1.0/videoSpeed))
+      
+      let composition = AVMutableComposition()
+      let track = composition.addMutableTrackWithMediaType(AVMediaTypeVideo, preferredTrackID: kCMPersistentTrackID_Invalid)
+      try! track.insertTimeRange(timeRange, ofTrack: assetVideoTrack!, atTime: kCMTimeZero)
+      
+      if let transform = assetVideoTrack?.preferredTransform {
+        track.preferredTransform = transform
+      }
+      
+      composition.scaleTimeRange(timeRange, toDuration: scaledTime)
+      
+      let playerItem = AVPlayerItem(asset: composition)
+      self.playerItem = playerItem
     }
   }
   
@@ -93,11 +137,6 @@ public class PGVideoEditorViewController: UIViewController {
       guard let newAsset = asset else { return }
       
       asynchronouslyLoadURLAsset(newAsset)
-      
-      let track = asset?.tracksWithMediaType(AVMediaTypeVideo)[0]
-      
-      print(asset?.preferredTransform)
-      print(track?.preferredTransform)
     }
   }
   
@@ -132,9 +171,7 @@ public class PGVideoEditorViewController: UIViewController {
     timeObserverToken = player.addPeriodicTimeObserverForInterval(interval, queue: dispatch_get_main_queue()) {
       [unowned self] time in
       
-      self.playSlider.currentValue = Double(CMTimeGetSeconds(time)/self.duration)
-      
-      print(self.player.rate)
+      self.updateSliderCurrent(time)
     }
     
     // initialize view layout
@@ -352,8 +389,14 @@ public class PGVideoEditorViewController: UIViewController {
          it our player's current item.
          */
         self.playerItem = AVPlayerItem(asset: newAsset)
+      }
+      
+      // Update slider value after asset has been loaded successfully
+      let interval = CMTimeMake(1, 1)
+      self.timeObserverToken = self.player.addPeriodicTimeObserverForInterval(interval, queue: dispatch_get_main_queue()) {
+        [unowned self] time in
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.playerItemDidReachEnd), name:AVPlayerItemDidPlayToEndTimeNotification, object: self.playerItem)
+        self.updateSliderCurrent(time)
       }
     }
     
@@ -405,7 +448,30 @@ public class PGVideoEditorViewController: UIViewController {
       
     }
   }
+  
+  // MARK: - Helpers
+  private func updateSliderCurrent(time: CMTime) {
+    if let itemDuration = playerItem?.duration {
+      if playerItem?.status == .ReadyToPlay {
+        let duration = CMTimeGetSeconds(itemDuration)
+        playSlider.currentValue = Double(CMTimeGetSeconds(time)/duration)
+        
+        print(self.player.rate)
+      }
+    }
+  }
+  
+  private func isVideoAssetPortrait() -> Bool {
+    let transform = assetVideoTrack?.preferredTransform
+    var isPortrait: Bool = false
+    if transform?.a == 0 && transform?.d == 0 && (transform?.b == 1.0 || transform?.b == -1.0) && (transform?.c == 1.0 || transform?.c == -1.0) {
+     isPortrait = true
+    }
+    
+    return isPortrait
+  }
 }
+
 
 // MARK: - ToolbarControllerDelegate
 
