@@ -117,10 +117,6 @@ public class PGVideoEditorViewController: UIViewController {
       
       composition.scaleTimeRange(timeRange, toDuration: scaledTime)
       
-      composition.naturalSize = playerView.bounds.size
-      
-      print("Natural Size: \(composition.naturalSize)")
-      
       let playerItem = AVPlayerItem(asset: composition)
       self.playerItem = playerItem
     }
@@ -169,15 +165,7 @@ public class PGVideoEditorViewController: UIViewController {
     
     addObserver(self, forKeyPath: "player.rate", options: [.New, .Initial], context: &playerViewControllerKVOContext)
     addObserver(self, forKeyPath: "player.currentItem.duration", options: [.New, .Initial], context: &playerViewControllerKVOContext)
-    
-    // Make sure we don't have a strong reference cycle by only capturing self as weak.
-    let interval = CMTimeMake(1, 1)
-    timeObserverToken = player.addPeriodicTimeObserverForInterval(interval, queue: dispatch_get_main_queue()) {
-      [unowned self] time in
-      
-      self.updateSliderCurrent(time)
-    }
-    
+  
     // initialize view layout
     initViewsLayout()
   }
@@ -323,9 +311,7 @@ public class PGVideoEditorViewController: UIViewController {
   }
   
   func playVideo(sender: UIButton) {
-    if rate == 0 {
-      rate = videoSpeed
-    }
+    player.play()
   }
   
   func handlePauseTap(recognizer: UITapGestureRecognizer) {
@@ -399,8 +385,6 @@ public class PGVideoEditorViewController: UIViewController {
         [unowned self] time in
         
         self.updateSliderCurrent(time)
-        
-        print(self.playerView.playerLayer.videoRect)
       }
     }
     
