@@ -16,7 +16,6 @@ class PGPlayerView: UIView {
       return playerLayer.player
     }
     
-    
     set {
       playerLayer.player = newValue
     }
@@ -24,6 +23,16 @@ class PGPlayerView: UIView {
   
   var playerLayer: AVPlayerLayer {
     return layer as! AVPlayerLayer
+  }
+  
+  override init(frame: CGRect) {
+    super.init(frame: frame)
+    
+    playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
+  }
+  
+  required init?(coder aDecoder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
   }
   
   override class func layerClass() -> AnyClass {

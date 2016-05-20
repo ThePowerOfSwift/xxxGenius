@@ -12,7 +12,6 @@
 		2BF4D7881AF11E2E00C801B2 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2BF4D7871AF11E2E00C801B2 /* Images.xcassets */; };
 		2BF4D78B1AF11E2E00C801B2 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2BF4D7891AF11E2E00C801B2 /* LaunchScreen.xib */; };
 		2BF4D7C01AF11F7200C801B2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BF4D7BF1AF11F7200C801B2 /* AppDelegate.swift */; };
-		63AB1E881CD9C8F1007604B7 /* SnapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63AB1E871CD9C8F1007604B7 /* SnapKit.framework */; };
 		63AB1E8A1CD9C983007604B7 /* SnapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63AB1E871CD9C8F1007604B7 /* SnapKit.framework */; };
 		63AB1E8B1CD9C983007604B7 /* SnapKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 63AB1E871CD9C8F1007604B7 /* SnapKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
@@ -72,7 +71,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				63AB1E8A1CD9C983007604B7 /* SnapKit.framework in Frameworks */,
-				63AB1E881CD9C8F1007604B7 /* SnapKit.framework in Frameworks */,
 				2B3A5D901B2F095200CCF99B /* imglyKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -156,7 +154,7 @@
 			attributes = {
 				LastSwiftMigration = 0700;
 				LastSwiftUpdateCheck = 0730;
-				LastUpgradeCheck = 0700;
+				LastUpgradeCheck = 0730;
 				ORGANIZATIONNAME = "9elements GmbH";
 				TargetAttributes = {
 					2BF4D77A1AF11E2E00C801B2 = {

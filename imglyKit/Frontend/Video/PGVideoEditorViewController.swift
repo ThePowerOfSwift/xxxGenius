@@ -21,7 +21,7 @@ public class PGVideoEditorViewController: UIViewController {
     static let fastSlow = 50.0
   }
 
-  lazy var playerView:PGPlayerView = PGPlayerView()
+  lazy var playerView: PGPlayerView = PGPlayerView()
   lazy var player = AVPlayer()
   let containedView = UIView()
   let playSlider = PGRangeSlider(frame: CGRectZero)
@@ -117,6 +117,10 @@ public class PGVideoEditorViewController: UIViewController {
       
       composition.scaleTimeRange(timeRange, toDuration: scaledTime)
       
+      composition.naturalSize = playerView.bounds.size
+      
+      print("Natural Size: \(composition.naturalSize)")
+      
       let playerItem = AVPlayerItem(asset: composition)
       self.playerItem = playerItem
     }
@@ -202,8 +206,6 @@ public class PGVideoEditorViewController: UIViewController {
     
     // Do any additional setup after loading the view.
     navigationItem.title = "Video Editor"
-    
-    playerView.playerLayer.player = player
     
     // setup Video Player View
     playerView.playerLayer.player = player
@@ -397,6 +399,8 @@ public class PGVideoEditorViewController: UIViewController {
         [unowned self] time in
         
         self.updateSliderCurrent(time)
+        
+        print(self.playerView.playerLayer.videoRect)
       }
     }
     
