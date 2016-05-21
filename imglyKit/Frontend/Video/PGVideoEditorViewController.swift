@@ -154,7 +154,7 @@ public class PGVideoEditorViewController: UIViewController {
           print("Layout FastSlow")
           fastslowController.delegate = self
           updateContainedViewHeight(FeatureViewHeight.fastSlow)
-          flipViewController(toobarController, toController: fastslowController, direction: .CurveEaseIn)
+          flipViewController(toobarController, toVC: fastslowController)
         }
       }
     }
@@ -232,28 +232,37 @@ public class PGVideoEditorViewController: UIViewController {
   // MARK: - Child Controller
   
   func displayInContainedController(controller: UIViewController) {
-    self.addChildViewController(controller)
+    addChildViewController(controller)
     controller.view.frame = containedView.bounds
     containedView.addSubview(controller.view)
     controller.didMoveToParentViewController(self)
   }
   
-  func flipViewController(fromController: UIViewController, toController: UIViewController, direction: UIViewAnimationOptions) {
+  func flipViewController(fromVC: UIViewController, toVC: UIViewController) {
+    // Prepare the two view controllers for the change.
+    fromVC.willMoveToParentViewController(nil)
+    addChildViewController(toVC)
     
-    toController.view.frame = fromController.view.bounds
-    addChildViewController(toController)
-    fromController.willMoveToParentViewController(nil)
+    // Get the start frame of the new view controller and the end frame
+    toVC.view.frame = containedView.frame
+    toVC.view.frame.origin.y += CGRectGetHeight(toVC.view.frame)
+    var endFrame = fromVC.view.bounds
+    endFrame.origin.y += CGRectGetHeight(fromVC.view.frame)
     
-    transitionFromViewController(fromController, toViewController: toController, duration: 1.2, options: direction, animations: nil) { (Bool) in
-      toController.didMoveToParentViewController(self)
-      fromController.removeFromParentViewController()
+    transitionFromViewController(fromVC, toViewController: toVC, duration: 0.5, options: .CurveEaseInOut, animations: { 
+        // Animate the views to their final positions.
+      toVC.view.frame = self.containedView.bounds
+      fromVC.view.frame = endFrame
+      }) { (Bool) in
+        fromVC.removeFromParentViewController()
+        toVC.didMoveToParentViewController(self)
     }
   }
   
   func returnToToolbarController(fromController: UIViewController) {
     toobarController.delegate = self
     updateContainedViewHeight(FeatureViewHeight.toolbar)
-    flipViewController(fromController, toController: toobarController, direction: .CurveEaseInOut)
+    flipViewController(fromController, toVC: toobarController)
   }
   
   // MARK: - Layout Update

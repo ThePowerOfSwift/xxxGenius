@@ -41,8 +41,8 @@ class FastSlowController: UIViewController {
     speedSlider.setMaximumTrackImage(UIImage(named: "sliderMax"), forState: .Normal)
     speedSlider.setMinimumTrackImage(UIImage(named: "sliderMin"), forState: .Normal)
     speedSlider.setThumbImage(UIImage(named: "sliderThumb"), forState: .Normal)
-    speedSlider.minimumValue = 0.0
-    speedSlider.maximumValue = 2.0
+    speedSlider.minimumValue = 0.1
+    speedSlider.maximumValue = 4.0
     speedSlider.addTarget(self, action: #selector(valueChanged), forControlEvents: .ValueChanged)
     speedSlider.value = 1.0
     
