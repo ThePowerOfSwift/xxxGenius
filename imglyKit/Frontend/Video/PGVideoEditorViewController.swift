@@ -189,6 +189,12 @@ public class PGVideoEditorViewController: UIViewController {
     
     view.backgroundColor = UIColor.toRGB(229.0, green: 224.0, blue: 221.0)
     
+    navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "backtomain"), style: .Plain, target: self, action: #selector(backToMainVC))
+    navigationItem.leftBarButtonItem?.tintColor = UIColor.whiteColor()
+    
+    navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "shareTo"), style: .Plain, target: self, action: #selector(shareTo))
+    navigationItem.rightBarButtonItem?.tintColor = UIColor.whiteColor()
+    
     // setup container view
     containerView.backgroundColor = UIColor.magentaColor()
     
@@ -246,11 +252,11 @@ public class PGVideoEditorViewController: UIViewController {
     // Get the start frame of the new view controller and the end frame
     toVC.view.frame = containedView.frame
     toVC.view.frame.origin.y += CGRectGetHeight(toVC.view.frame)
-    var endFrame = fromVC.view.bounds
+    var endFrame = fromVC.view.frame
     endFrame.origin.y += CGRectGetHeight(fromVC.view.frame)
     
-    transitionFromViewController(fromVC, toViewController: toVC, duration: 0.5, options: .CurveEaseInOut, animations: { 
-        // Animate the views to their final positions.
+    transitionFromViewController(fromVC, toViewController: toVC, duration: 0.5, options: .TransitionNone, animations: {
+      // Animate the views to their final positions.
       toVC.view.frame = self.containedView.bounds
       fromVC.view.frame = endFrame
       }) { (Bool) in
@@ -466,6 +472,14 @@ public class PGVideoEditorViewController: UIViewController {
     }
     
     return isPortrait
+  }
+  
+  func backToMainVC() {
+    dismissViewControllerAnimated(true, completion: nil)
+  }
+  
+  func shareTo() {
+    
   }
 }
 
