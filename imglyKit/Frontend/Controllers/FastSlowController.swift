@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AVFoundation
 
 protocol FastSlowControllerDelegate {
   func featureClose()
@@ -21,6 +22,20 @@ class FastSlowController: UIViewController {
   let speedSlider  = UISlider()
   let seperator = UIView()
   let speedLabel = UILabel()
+  
+  var videoTrack: AVMutableCompositionTrack?
+  
+  var speed: Float = 1.0 {
+    didSet {
+      if let track = videoTrack {
+        let range = track.timeRange
+        
+        // restore to 1x, then to new speed
+        let scaledTime = CMTimeMultiplyByFloat64(range.duration, Double(oldValue/speed))
+        track.scaleTimeRange(range, toDuration: scaledTime)
+      }
+    }
+  }
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -65,7 +80,7 @@ class FastSlowController: UIViewController {
   }
   
   func valueChanged(sender: UISlider) {
-    let speed = sender.value
+    speed = sender.value
     speedLabel.text = String(format: "%@%.1f", "x", speed)
     
     delegate?.updateVideoSpeed(speed)

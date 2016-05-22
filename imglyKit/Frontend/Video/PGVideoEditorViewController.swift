@@ -19,6 +19,7 @@ public class PGVideoEditorViewController: UIViewController {
   enum FeatureViewHeight {
     static let toolbar  = 50.0
     static let fastSlow = 50.0
+    static let multiVideosCombined = 150.0
   }
 
   lazy var playerView: PGPlayerView = PGPlayerView()
@@ -37,7 +38,17 @@ public class PGVideoEditorViewController: UIViewController {
   
   lazy var videoTrack: AVMutableCompositionTrack = {
     let track: AVMutableCompositionTrack = self.mixComposition.addMutableTrackWithMediaType(AVMediaTypeVideo, preferredTrackID: kCMPersistentTrackID_Invalid)
-    try! track.insertTimeRange(CMTimeRange(start: kCMTimeZero, duration: self.asset!.duration), ofTrack: self.assetVideoTrack!, atTime: kCMTimeZero)
+    
+    // insert Asset Track and set Asset's transform to Composition Track
+    do {
+      try track.insertTimeRange(CMTimeRange(start: kCMTimeZero, duration: self.asset!.duration), ofTrack: self.assetVideoTrack!, atTime: kCMTimeZero)
+      if let transform = self.assetVideoTrack?.preferredTransform {
+        track.preferredTransform = transform
+      }
+    } catch {
+      print("Insert Asset to Track Failure!")
+    }
+    
     return track
   } ()
   
@@ -57,7 +68,11 @@ public class PGVideoEditorViewController: UIViewController {
   
   // Controllers
   let toobarController = ToolbarController()
-  let fastslowController = FastSlowController()
+  lazy var fastslowController: FastSlowController = {
+    let controller = FastSlowController()
+    controller.videoTrack = self.videoTrack
+    return controller
+  } ()
   
   public var videoFileUrl: NSURL? {
     didSet {
@@ -104,20 +119,7 @@ public class PGVideoEditorViewController: UIViewController {
   var videoSpeed: Float = 1.0 {
     didSet {
       // update video speed in Player
-      let timeRange = CMTimeRange(start: kCMTimeZero, duration: self.asset!.duration)
-      let scaledTime = CMTimeMultiplyByFloat64(self.asset!.duration, Double(1.0/videoSpeed))
-      
-      let composition = AVMutableComposition()
-      let track = composition.addMutableTrackWithMediaType(AVMediaTypeVideo, preferredTrackID: kCMPersistentTrackID_Invalid)
-      try! track.insertTimeRange(timeRange, ofTrack: assetVideoTrack!, atTime: kCMTimeZero)
-      
-      if let transform = assetVideoTrack?.preferredTransform {
-        track.preferredTransform = transform
-      }
-      
-      composition.scaleTimeRange(timeRange, toDuration: scaledTime)
-      
-      let playerItem = AVPlayerItem(asset: composition)
+      let playerItem = AVPlayerItem(asset: mixComposition)
       self.playerItem = playerItem
     }
   }
