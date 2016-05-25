@@ -19,7 +19,7 @@ public class PGVideoEditorViewController: UIViewController {
   enum FeatureViewHeight {
     static let toolbar  = 50.0
     static let fastSlow = 50.0
-    static let multiVideosCombined = 150.0
+    static let multiVideosCombined = 80.0
   }
 
   lazy var playerView: PGPlayerView = PGPlayerView()
@@ -70,6 +70,12 @@ public class PGVideoEditorViewController: UIViewController {
   let toobarController = ToolbarController()
   lazy var fastslowController: FastSlowController = {
     let controller = FastSlowController()
+    controller.videoTrack = self.videoTrack
+    return controller
+  } ()
+  lazy var multiVideosCombinedController: MultiVideosCombinedController = {
+    let controller = MultiVideosCombinedController()
+    controller.mixComposition = self.mixComposition
     controller.videoTrack = self.videoTrack
     return controller
   } ()
@@ -157,6 +163,11 @@ public class PGVideoEditorViewController: UIViewController {
           fastslowController.delegate = self
           updateContainedViewHeight(FeatureViewHeight.fastSlow)
           flipViewController(toobarController, toVC: fastslowController)
+        case .MultiVideosCombined:
+          print("MultiVideosCombined")
+          updateContainedViewHeight(FeatureViewHeight.multiVideosCombined)
+          multiVideosCombinedController.delegate = self
+          flipViewController(toobarController, toVC: multiVideosCombinedController)
         }
       }
     }
@@ -487,7 +498,6 @@ public class PGVideoEditorViewController: UIViewController {
 
 
 // MARK: - ToolbarControllerDelegate
-
 extension PGVideoEditorViewController: ToolbarControllerDelegate {
   func selectedFeature(feature: ToobarSelectedFeature) {
     print(#function)
@@ -496,9 +506,8 @@ extension PGVideoEditorViewController: ToolbarControllerDelegate {
 }
 
 // MARK: - FastSlowControllerDelegate
-
 extension PGVideoEditorViewController: FastSlowControllerDelegate {
-  func featureClose() {
+  func fastSlowFeatureClose() {
     
     // show main Toolbar Control
     returnToToolbarController(fastslowController)
@@ -506,5 +515,18 @@ extension PGVideoEditorViewController: FastSlowControllerDelegate {
   
   func updateVideoSpeed(speed: Float) {
     videoSpeed = speed
+  }
+}
+
+// MARK: - MultiVideosCombinedControllerDelegate
+extension PGVideoEditorViewController: MultiVideosCombinedControllerDelegate {
+  func combinedFeatureClose() {
+    
+    // show main Toolbar Control
+    returnToToolbarController(multiVideosCombinedController)
+  }
+  
+  func updatePlayer() {
+    
   }
 }

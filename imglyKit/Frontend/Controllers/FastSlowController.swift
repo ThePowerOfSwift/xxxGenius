@@ -10,7 +10,7 @@ import UIKit
 import AVFoundation
 
 protocol FastSlowControllerDelegate {
-  func featureClose()
+  func fastSlowFeatureClose()
   func updateVideoSpeed(speed: Float)
 }
 
@@ -125,6 +125,6 @@ class FastSlowController: UIViewController {
   }
   
   func featureClose() {
-    delegate?.featureClose()
+    delegate?.fastSlowFeatureClose()
   }
 }

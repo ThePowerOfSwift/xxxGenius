@@ -10,6 +10,7 @@ import UIKit
 
 enum ToobarSelectedFeature {
   case FastSlow
+  case MultiVideosCombined
 }
 
 protocol ToolbarControllerDelegate {
@@ -20,7 +21,7 @@ class ToolbarController: UIViewController {
   
   let toolBar = UIToolbar()
   
-  var delegate : ToolbarControllerDelegate?
+  var delegate: ToolbarControllerDelegate?
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -37,13 +38,18 @@ class ToolbarController: UIViewController {
       make.bottom.equalTo(view.snp_bottom)
     }
     
+    let flexibleItem = UIBarButtonItem(barButtonSystemItem: .FlexibleSpace, target: nil, action: nil)
     let playFastSlowItem = UIBarButtonItem(image: UIImage(named: "time108"), style: .Plain, target: nil, action: #selector(showPlayFastSlow))
+    let multiVideosCombinedItem = UIBarButtonItem(image: UIImage(named: "trim36"), style: .Plain, target: nil, action: #selector(showMultiVideosCombined))
     
-    toolBar.setItems([playFastSlowItem], animated: true)
+    toolBar.setItems([playFastSlowItem, flexibleItem, multiVideosCombinedItem], animated: true)
   }
   
   func showPlayFastSlow() {
-    
     delegate?.selectedFeature(ToobarSelectedFeature.FastSlow)
+  }
+  
+  func showMultiVideosCombined() {
+    delegate?.selectedFeature(ToobarSelectedFeature.MultiVideosCombined)
   }
 }
