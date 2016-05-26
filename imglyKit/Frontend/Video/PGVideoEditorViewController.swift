@@ -19,7 +19,7 @@ public class PGVideoEditorViewController: UIViewController {
   enum FeatureViewHeight {
     static let toolbar  = 50.0
     static let fastSlow = 50.0
-    static let multiVideosCombined = 80.0
+    static let multiVideosCombined = 150.0
   }
 
   lazy var playerView: PGPlayerView = PGPlayerView()
@@ -73,10 +73,9 @@ public class PGVideoEditorViewController: UIViewController {
     controller.videoTrack = self.videoTrack
     return controller
   } ()
-  lazy var multiVideosCombinedController: MultiVideosCombinedController = {
-    let controller = MultiVideosCombinedController()
-    controller.mixComposition = self.mixComposition
-    controller.videoTrack = self.videoTrack
+  
+  lazy var videosRangeSelectionController: RangeSelectionController = {
+    let controller = UIViewController.initFromStoryboard("RangeSelectionController") as! RangeSelectionController
     return controller
   } ()
   
@@ -166,8 +165,7 @@ public class PGVideoEditorViewController: UIViewController {
         case .MultiVideosCombined:
           print("MultiVideosCombined")
           updateContainedViewHeight(FeatureViewHeight.multiVideosCombined)
-          multiVideosCombinedController.delegate = self
-          flipViewController(toobarController, toVC: multiVideosCombinedController)
+          flipViewController(toobarController, toVC: videosRangeSelectionController)
         }
       }
     }
@@ -518,15 +516,9 @@ extension PGVideoEditorViewController: FastSlowControllerDelegate {
   }
 }
 
-// MARK: - MultiVideosCombinedControllerDelegate
-extension PGVideoEditorViewController: MultiVideosCombinedControllerDelegate {
-  func combinedFeatureClose() {
-    
-    // show main Toolbar Control
-    returnToToolbarController(multiVideosCombinedController)
-  }
-  
-  func updatePlayer() {
-    
+
+extension UIViewController {
+  class func initFromStoryboard(identifier: String) -> UIViewController {
+    return UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier(identifier)
   }
 }

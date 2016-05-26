@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+    </dependencies>
+    <scenes>
+        <!--Range Selection Controller-->
+        <scene sceneID="uVP-Vc-XmP">
+            <objects>
+                <tableViewController storyboardIdentifier="RangeSelectionController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="qdc-Zc-WeW" customClass="RangeSelectionController" customModule="imglyKit" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" scrollEnabled="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="84" sectionHeaderHeight="28" sectionFooterHeight="28" id="dSh-e8-svf">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="200"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" red="0.87450980392156863" green="0.85098039215686272" blue="0.83529411764705885" alpha="1" colorSpace="calibratedRGB"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="rangeSelectionCell" rowHeight="50" id="e9c-U5-brL" customClass="VideoRangeSelectionCell" customModule="imglyKit">
+                                <rect key="frame" x="0.0" y="28" width="600" height="50"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="e9c-U5-brL" id="khm-2l-nsN">
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="50"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6JK-rX-fOh" customClass="YSRangeSlider" customModule="imglyKit">
+                                            <rect key="frame" x="54" y="12" width="531" height="30"/>
+                                            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="30" id="lgX-lG-sVy"/>
+                                            </constraints>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="number" keyPath="minimumValue">
+                                                    <real key="value" value="0.0"/>
+                                                </userDefinedRuntimeAttribute>
+                                                <userDefinedRuntimeAttribute type="number" keyPath="maximumValue">
+                                                    <real key="value" value="1"/>
+                                                </userDefinedRuntimeAttribute>
+                                                <userDefinedRuntimeAttribute type="color" keyPath="sliderLineColor">
+                                                    <color key="value" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                </userDefinedRuntimeAttribute>
+                                                <userDefinedRuntimeAttribute type="color" keyPath="sliderLineColorBetweenThumbs">
+                                                    <color key="value" red="1" green="0.40000000600000002" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                </userDefinedRuntimeAttribute>
+                                                <userDefinedRuntimeAttribute type="number" keyPath="sliderSidePadding">
+                                                    <real key="value" value="14"/>
+                                                </userDefinedRuntimeAttribute>
+                                                <userDefinedRuntimeAttribute type="color" keyPath="leftThumbColor">
+                                                    <color key="value" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                </userDefinedRuntimeAttribute>
+                                                <userDefinedRuntimeAttribute type="color" keyPath="rightThumbColor">
+                                                    <color key="value" red="0.79215686269999996" green="0.14901960780000001" blue="0.094117647060000004" alpha="1" colorSpace="calibratedRGB"/>
+                                                </userDefinedRuntimeAttribute>
+                                                <userDefinedRuntimeAttribute type="number" keyPath="leftThumbCornerRadius">
+                                                    <real key="value" value="3"/>
+                                                </userDefinedRuntimeAttribute>
+                                                <userDefinedRuntimeAttribute type="number" keyPath="rightThumbCornerRadius">
+                                                    <real key="value" value="5"/>
+                                                </userDefinedRuntimeAttribute>
+                                                <userDefinedRuntimeAttribute type="number" keyPath="thumbsSize">
+                                                    <real key="value" value="17"/>
+                                                </userDefinedRuntimeAttribute>
+                                                <userDefinedRuntimeAttribute type="number" keyPath="sliderLineHeight">
+                                                    <real key="value" value="8"/>
+                                                </userDefinedRuntimeAttribute>
+                                                <userDefinedRuntimeAttribute type="number" keyPath="minimumSelectedValue">
+                                                    <real key="value" value="0.0"/>
+                                                </userDefinedRuntimeAttribute>
+                                            </userDefinedRuntimeAttributes>
+                                        </view>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1:00~2:00 (5s)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rYf-nB-1hD">
+                                            <rect key="frame" x="63" y="4" width="524" height="13"/>
+                                            <fontDescription key="fontDescription" name="Menlo-Bold" family="Menlo" pointSize="11"/>
+                                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        </label>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="BNo-7S-bKi">
+                                            <rect key="frame" x="16" y="8" width="33.5" height="33.5"/>
+                                            <color key="backgroundColor" red="1" green="0.40000000600000002" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" secondItem="BNo-7S-bKi" secondAttribute="height" multiplier="1:1" id="z7S-xW-hxb"/>
+                                            </constraints>
+                                        </imageView>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="BNo-7S-bKi" firstAttribute="top" secondItem="khm-2l-nsN" secondAttribute="topMargin" id="1lx-m5-dfl"/>
+                                        <constraint firstItem="BNo-7S-bKi" firstAttribute="leading" secondItem="khm-2l-nsN" secondAttribute="leadingMargin" constant="8" id="4Sw-HP-ob0"/>
+                                        <constraint firstAttribute="bottomMargin" secondItem="BNo-7S-bKi" secondAttribute="bottom" id="5If-nW-dJM"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="6JK-rX-fOh" secondAttribute="trailing" constant="7" id="6JR-gR-tBA"/>
+                                        <constraint firstItem="6JK-rX-fOh" firstAttribute="top" secondItem="rYf-nB-1hD" secondAttribute="bottom" constant="-5" id="KZD-So-x6c"/>
+                                        <constraint firstItem="rYf-nB-1hD" firstAttribute="leading" secondItem="6JK-rX-fOh" secondAttribute="leading" constant="9" id="Kzu-MI-gnk"/>
+                                        <constraint firstItem="rYf-nB-1hD" firstAttribute="trailing" secondItem="6JK-rX-fOh" secondAttribute="trailing" constant="2" id="egC-D6-40q"/>
+                                        <constraint firstItem="6JK-rX-fOh" firstAttribute="bottom" secondItem="BNo-7S-bKi" secondAttribute="centerY" constant="17.25" id="fUz-wL-XhR"/>
+                                        <constraint firstItem="6JK-rX-fOh" firstAttribute="leading" secondItem="BNo-7S-bKi" secondAttribute="trailing" constant="4.5" id="pfz-od-WKo"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="qdc-Zc-WeW" id="fdo-nE-MTl"/>
+                            <outlet property="delegate" destination="qdc-Zc-WeW" id="mM2-WS-iWV"/>
+                        </connections>
+                    </tableView>
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <size key="freeformSize" width="600" height="200"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="KjR-kf-NJn" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="264" y="919"/>
+        </scene>
+    </scenes>
+</document>
