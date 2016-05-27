@@ -16,14 +16,12 @@ class VideoRangeSelectionCell: UITableViewCell {
     // Configure the view for the selected state
   }
   
-//  override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-//    super.init(style: style, reuseIdentifier: reuseIdentifier)
-//  }
-//  
-//  required init?(coder aDecoder: NSCoder) {
-//    
-//  }
+  required init?(coder aDecoder: NSCoder) {
+    super.init(coder: aDecoder)
+    commonInit()
+  }
   
   private func commonInit() {
+    layoutMargins = UIEdgeInsetsZero
   }
 }
