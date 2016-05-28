@@ -127,6 +127,11 @@
                                         <constraint firstItem="6JK-rX-fOh" firstAttribute="leading" secondItem="BNo-7S-bKi" secondAttribute="trailing" constant="4.5" id="pfz-od-WKo"/>
                                     </constraints>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="imageThumb" destination="BNo-7S-bKi" id="mdf-Uq-Idb"/>
+                                    <outlet property="rangeLabel" destination="rYf-nB-1hD" id="oGq-IN-7HL"/>
+                                    <outlet property="rangeSlider" destination="6JK-rX-fOh" id="UKg-uR-LCX"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>

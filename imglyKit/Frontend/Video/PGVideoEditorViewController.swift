@@ -76,6 +76,7 @@ public class PGVideoEditorViewController: UIViewController {
   
   lazy var videosRangeSelectionController: RangeSelectionController = {
     let controller = UIViewController.initFromStoryboard("RangeSelectionController") as! RangeSelectionController
+    controller.videoTrack = self.videoTrack
     return controller
   } ()
   
@@ -165,6 +166,7 @@ public class PGVideoEditorViewController: UIViewController {
         case .MultiVideosCombined:
           print("MultiVideosCombined")
           updateContainedViewHeight(FeatureViewHeight.multiVideosCombined)
+          videosRangeSelectionController.initAssets(mixComposition)
           flipViewController(toobarController, toVC: videosRangeSelectionController)
         }
       }

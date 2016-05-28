@@ -9,9 +9,18 @@
 import UIKit
 import AVFoundation
 
+struct VideoAsset {
+  var asset: AVAsset
+  var startTime: CMTime
+  var endTime: CMTime
+}
+
 class RangeSelectionController: UITableViewController {
   
-  var videoAssets: [AVAsset] = []
+  // merely used to int the track
+  var videoTrack: AVMutableCompositionTrack?
+  
+  private var videoAssets: [VideoAsset] = []
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -26,22 +35,62 @@ class RangeSelectionController: UITableViewController {
   override func didReceiveMemoryWarning() {
     super.didReceiveMemoryWarning()
     // Dispose of any resources that can be recreated.
+    print("MEMORY WARNING")
+  }
+  
+  private func addAsset(asset: AVAsset?) {
+    if let asset = asset {
+      let videoAsset = VideoAsset(asset: asset, startTime: kCMTimeZero, endTime: asset.duration)
+      videoAssets.append(videoAsset)
+      tableView.reloadData()
+    }
+  }
+  
+  func initAssets(asset: AVAsset?) {
+    videoAssets.removeAll()
+    addAsset(asset)
+  }
+  
+  private func getAssetThumbnail(index: Int, completion: (resultImage: UIImage) -> Void) {
+    let asset = self.videoAssets[index].asset
+    let atTime = self.videoAssets[index].startTime
+    let imageGenerator = AVAssetImageGenerator(asset: asset)
+    
+    imageGenerator.generateCGImagesAsynchronouslyForTimes([NSValue(CMTime: atTime)]) {(_, image, _, result, error) in
+      if result == .Succeeded {
+        dispatch_async(dispatch_get_main_queue()) {
+          completion(resultImage: UIImage(CGImage: image!))
+        }
+      }
+    }
+    
   }
   
   // MARK: - Table view data source
   
   override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-    // #warning Incomplete implementation, return the number of sections
     return 1
   }
   
   override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    // #warning Incomplete implementation, return the number of rows
-    return 2
+    return videoAssets.count
   }
   
   override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
     let cell = tableView.dequeueReusableCellWithIdentifier("rangeSelectionCell", forIndexPath: indexPath) as! VideoRangeSelectionCell
+    
+    // cell image
+    getAssetThumbnail(indexPath.row) { (resultImage) in
+      cell.imageThumb.image = resultImage
+    }
+
+    // cell slider min/max value
+    let duration  = videoAssets[indexPath.row].asset.duration
+    cell.rangeSlider.minimumValue = 0.0
+    cell.rangeSlider.maximumValue = CGFloat(CMTimeGetSeconds(duration))
+    cell.rangeSlider.maximumSelectedValue = CGFloat(CMTimeGetSeconds(duration))
+    cell.rangeSlider.tag = indexPath.row
+    cell.rangeSlider.delegate = self
     
     return cell
   }
@@ -95,4 +144,21 @@ class RangeSelectionController: UITableViewController {
    }
    */
   
+}
+
+extension RangeSelectionController: YSRangeSliderDelegate {
+  func rangeSliderDidChange(rangeSlider: YSRangeSlider, minimumSelectedValue: CGFloat, maximumSelectedValue: CGFloat) {
+  }
+  
+  func rangeSliderTouchEndDidChange(rangeSlider: YSRangeSlider, minimumSelectedValue: CGFloat, maximumSelectedValue: CGFloat) {
+    let index = rangeSlider.tag
+    
+    videoAssets[index].startTime = CMTime(seconds: Double(rangeSlider.minimumSelectedValue), preferredTimescale: 600)
+    videoAssets[index].endTime = CMTime(seconds: Double(rangeSlider.maximumSelectedValue), preferredTimescale: 600)
+    
+    getAssetThumbnail(index) {[weak self](resultImage) in
+      let cell = self?.tableView.cellForRowAtIndexPath(NSIndexPath(forRow: index, inSection: 0)) as! VideoRangeSelectionCell
+      cell.imageThumb.image = resultImage
+    }
+  }
 }

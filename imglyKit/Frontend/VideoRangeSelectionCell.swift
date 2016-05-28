@@ -10,6 +10,10 @@ import UIKit
 
 class VideoRangeSelectionCell: UITableViewCell {
   
+  @IBOutlet weak var imageThumb: UIImageView!
+  @IBOutlet weak var rangeSlider: YSRangeSlider!
+  @IBOutlet weak var rangeLabel: UILabel!
+  
   override func setSelected(selected: Bool, animated: Bool) {
     super.setSelected(selected, animated: animated)
     
