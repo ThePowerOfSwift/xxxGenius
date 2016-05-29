@@ -28,6 +28,9 @@
                                         <constraint firstAttribute="height" constant="30" id="qMr-ss-zDD"/>
                                     </constraints>
                                     <state key="normal" image="close2"/>
+                                    <connections>
+                                        <action selector="featureClose:" destination="qdc-Zc-WeW" eventType="touchUpInside" id="lBF-E7-btk"/>
+                                    </connections>
                                 </button>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ie0-0D-mT2">
                                     <rect key="frame" x="285" y="3" width="43" height="43"/>

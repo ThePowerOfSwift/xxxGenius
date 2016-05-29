@@ -77,6 +77,7 @@ public class PGVideoEditorViewController: UIViewController {
   lazy var videosRangeSelectionController: RangeSelectionController = {
     let controller = UIViewController.initFromStoryboard("RangeSelectionController") as! RangeSelectionController
     controller.videoTrack = self.videoTrack
+    controller.delegate = self
     return controller
   } ()
   
@@ -518,7 +519,19 @@ extension PGVideoEditorViewController: FastSlowControllerDelegate {
   }
 }
 
+// MARK: - RangeSelectionControllerDelegate
+extension PGVideoEditorViewController: RangeSelectionControllerDelegate {
+  func rangeSelectionFeatureClose() {
+    // show main Toolbar Control
+    returnToToolbarController(videosRangeSelectionController)
+  }
+  
+  func selectionUpdateVideoPlayer(item: AVPlayerItem) {
+    playerItem = item
+  }
+}
 
+// MARK: - Init Storyboard Extension
 extension UIViewController {
   class func initFromStoryboard(identifier: String) -> UIViewController {
     return UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier(identifier)

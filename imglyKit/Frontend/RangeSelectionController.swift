@@ -15,10 +15,17 @@ struct VideoAsset {
   var endTime: CMTime
 }
 
+protocol RangeSelectionControllerDelegate {
+  func rangeSelectionFeatureClose()
+  func selectionUpdateVideoPlayer(item: AVPlayerItem)
+}
+
 class RangeSelectionController: UITableViewController {
   
   // merely used to int the track
   var videoTrack: AVMutableCompositionTrack?
+  
+  var delegate : RangeSelectionControllerDelegate?
   
   private var videoAssets: [VideoAsset] = []
   
@@ -35,7 +42,6 @@ class RangeSelectionController: UITableViewController {
   override func didReceiveMemoryWarning() {
     super.didReceiveMemoryWarning()
     // Dispose of any resources that can be recreated.
-    print("MEMORY WARNING")
   }
   
   private func addAsset(asset: AVAsset?) {
@@ -61,9 +67,12 @@ class RangeSelectionController: UITableViewController {
         dispatch_async(dispatch_get_main_queue()) {
           completion(resultImage: UIImage(CGImage: image!))
         }
+      } else {
+        dispatch_async(dispatch_get_main_queue()) {
+          completion(resultImage: UIImage(named: "noneimage")!)
+        }
       }
     }
-    
   }
   
   // MARK: - Table view data source
@@ -91,6 +100,7 @@ class RangeSelectionController: UITableViewController {
     cell.rangeSlider.maximumSelectedValue = CGFloat(CMTimeGetSeconds(duration))
     cell.rangeSlider.tag = indexPath.row
     cell.rangeSlider.delegate = self
+    upateCellLabel(cell, start: kCMTimeZero, end: duration)
     
     return cell
   }
@@ -144,8 +154,49 @@ class RangeSelectionController: UITableViewController {
    }
    */
   
+  
+  @IBAction func featureClose(sender: AnyObject) {
+    delegate?.rangeSelectionFeatureClose()
+  }
+  
+  // MARK: - Helps
+  private func upateCellLabel(cell: VideoRangeSelectionCell, start: CMTime, end: CMTime) {
+    
+    let start_time = CMTimeGetSeconds(start)
+    let end_time = CMTimeGetSeconds(end)
+    
+    // start
+    let start_minutes = Int(start_time / 60)
+    let start_seconds = Int(start_time % 60)
+    
+    // end 
+    let end_minutes = Int(end_time / 60)
+    let end_seconds = Int(end_time % 60)
+    
+    // duration
+    let duration = round(CMTimeGetSeconds(CMTimeSubtract(end, start)))
+    
+    let rangeText = "\(start_minutes):\(start_seconds)~\(end_minutes):\(end_seconds)(\(duration))s"
+    cell.rangeLabel.text = rangeText
+  }
+  
+  private func composeAssetsToItem() -> AVPlayerItem {
+    let mixComposition = AVMutableComposition()
+    var insertTime = kCMTimeZero
+    
+    for assetItem in videoAssets {
+      let range = CMTimeRange(start: assetItem.startTime, end: assetItem.endTime)
+      try! mixComposition.insertTimeRange(range, ofAsset: assetItem.asset, atTime: insertTime)
+      insertTime = insertTime + range.duration
+    }
+    
+    let playerItem = AVPlayerItem(asset: mixComposition)
+    
+    return playerItem
+  }
 }
 
+// MARK: - YSRangeSliderDelegate
 extension RangeSelectionController: YSRangeSliderDelegate {
   func rangeSliderDidChange(rangeSlider: YSRangeSlider, minimumSelectedValue: CGFloat, maximumSelectedValue: CGFloat) {
   }
@@ -159,6 +210,13 @@ extension RangeSelectionController: YSRangeSliderDelegate {
     getAssetThumbnail(index) {[weak self](resultImage) in
       let cell = self?.tableView.cellForRowAtIndexPath(NSIndexPath(forRow: index, inSection: 0)) as! VideoRangeSelectionCell
       cell.imageThumb.image = resultImage
+      
+      // update time range label
+      let start = self?.videoAssets[index].startTime
+      let end = self?.videoAssets[index].endTime
+      self?.upateCellLabel(cell, start: start!, end: end!)
     }
+    
+    delegate?.selectionUpdateVideoPlayer(composeAssetsToItem())
   }
 }
