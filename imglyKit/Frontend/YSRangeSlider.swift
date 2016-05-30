@@ -29,7 +29,7 @@ import UIKit
     }
   }
   /// The preselected maximum value from range [minimumValue, maximumValue]
-  @IBInspectable public var maximumSelectedValue: CGFloat = 1.0 {
+  @IBInspectable public var maximumSelectedValue: CGFloat = -1.0 {
     didSet{
       if maximumSelectedValue < minimumValue || maximumSelectedValue > maximumValue {
         maximumSelectedValue = maximumValue

@@ -27,7 +27,6 @@ public class PGVideoEditorViewController: UIViewController {
   let containedView = UIView()
   let playSlider = PGRangeSlider(frame: CGRectZero)
   let videoPlayPauseButton = UIButton(frame: CGRectZero)
-  let containerView = UIView()
   private var timeObserverToken: AnyObject?
   
   // Video Composition/Instruction/Layer Init
@@ -209,9 +208,6 @@ public class PGVideoEditorViewController: UIViewController {
     navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "shareTo"), style: .Plain, target: self, action: #selector(shareTo))
     navigationItem.rightBarButtonItem?.tintColor = UIColor.whiteColor()
     
-    // setup container view
-    containerView.backgroundColor = UIColor.magentaColor()
-    
     // Do any additional setup after loading the view.
     navigationItem.title = "Video Editor"
     
@@ -294,7 +290,19 @@ public class PGVideoEditorViewController: UIViewController {
     containedView.snp_remakeConstraints { (make) in
       make.left.equalTo(view)
       make.right.equalTo(view)
-      make.height.equalTo(50.0)
+      
+      var containedHeight = 50.0
+      
+      if let style = layoutStyle{
+        switch style {
+        case .FastSlow:
+          containedHeight = FeatureViewHeight.fastSlow
+        case .MultiVideosCombined:
+         containedHeight = FeatureViewHeight.multiVideosCombined
+        }
+      }
+      
+      make.height.equalTo(containedHeight)
       make.bottom.equalTo(view)
     }
     

@@ -8,6 +8,7 @@
 
 import UIKit
 import AVFoundation
+import MobileCoreServices
 
 struct VideoAsset {
   var asset: AVAsset
@@ -97,7 +98,12 @@ class RangeSelectionController: UITableViewController {
     let duration  = videoAssets[indexPath.row].asset.duration
     cell.rangeSlider.minimumValue = 0.0
     cell.rangeSlider.maximumValue = CGFloat(CMTimeGetSeconds(duration))
-    cell.rangeSlider.maximumSelectedValue = CGFloat(CMTimeGetSeconds(duration))
+    
+    // only update max selected value when load first time
+    if cell.rangeSlider.maximumSelectedValue == -1.0 {
+      cell.rangeSlider.maximumSelectedValue = CGFloat(CMTimeGetSeconds(duration))
+    }
+    
     cell.rangeSlider.tag = indexPath.row
     cell.rangeSlider.delegate = self
     upateCellLabel(cell, start: kCMTimeZero, end: duration)
@@ -159,6 +165,16 @@ class RangeSelectionController: UITableViewController {
     delegate?.rangeSelectionFeatureClose()
   }
   
+  @IBAction func addVideoAsset(sender: UIButton) {
+    let picker = UIImagePickerController()
+    picker.delegate = self
+    picker.allowsEditing = false
+    picker.sourceType = .PhotoLibrary
+    picker.mediaTypes = [String(kUTTypeMovie)]
+    
+    self.presentViewController(picker, animated: true, completion: nil)
+  }
+  
   // MARK: - Helps
   private func upateCellLabel(cell: VideoRangeSelectionCell, start: CMTime, end: CMTime) {
     
@@ -181,16 +197,25 @@ class RangeSelectionController: UITableViewController {
   }
   
   private func composeAssetsToItem() -> AVPlayerItem {
-    let mixComposition = AVMutableComposition()
+    let composition = AVMutableComposition()
+    let videoTrack = composition.addMutableTrackWithMediaType(AVMediaTypeVideo, preferredTrackID: kCMPersistentTrackID_Invalid)
     var insertTime = kCMTimeZero
     
     for assetItem in videoAssets {
       let range = CMTimeRange(start: assetItem.startTime, end: assetItem.endTime)
-      try! mixComposition.insertTimeRange(range, ofAsset: assetItem.asset, atTime: insertTime)
-      insertTime = insertTime + range.duration
+      
+      do {
+        let assetTrack = assetItem.asset.tracksWithMediaType(AVMediaTypeVideo).first!
+        try videoTrack.insertTimeRange(range, ofTrack: assetTrack, atTime: insertTime)
+      } catch (_) {
+        print("Compose Asset Item Failure.")
+      }
+      
+      insertTime = CMTimeAdd(insertTime, range.duration)
     }
     
-    let playerItem = AVPlayerItem(asset: mixComposition)
+    let playerItem = AVPlayerItem(asset: composition)
+    print(CMTimeGetSeconds(playerItem.duration))
     
     return playerItem
   }
@@ -218,5 +243,25 @@ extension RangeSelectionController: YSRangeSliderDelegate {
     }
     
     delegate?.selectionUpdateVideoPlayer(composeAssetsToItem())
+  }
+}
+
+// MARK: - UIImagePickerControllerDelegate
+extension RangeSelectionController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+  func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
+    self.dismissViewControllerAnimated(false, completion: nil)
+    
+    let videoURL = info[UIImagePickerControllerMediaURL] as? NSURL
+    
+    if let url = videoURL {
+      let videoAsset = AVAsset(URL: url)
+      self.addAsset(videoAsset)
+      
+      delegate?.selectionUpdateVideoPlayer(composeAssetsToItem())
+    }
+  }
+  
+  func imagePickerControllerDidCancel(picker: UIImagePickerController) {
+    self.dismissViewControllerAnimated(true, completion: nil)
   }
 }
