@@ -84,7 +84,7 @@ public class IMGLYResponseFilter: CIFilter, IMGLYFilterTypeProtocol {
                 outputImage = inputImage
             }
         }
-        
+      
         return outputImage
     }
 }

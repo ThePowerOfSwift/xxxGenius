@@ -102,11 +102,19 @@ class RangeSelectionController: UITableViewController {
     // only update max selected value when load first time
     if cell.rangeSlider.maximumSelectedValue == -1.0 {
       cell.rangeSlider.maximumSelectedValue = CGFloat(CMTimeGetSeconds(duration))
+    } else {
+      
+      // cell reused need to reassgin value
+      cell.rangeSlider.minimumSelectedValue = CGFloat(CMTimeGetSeconds(videoAssets[indexPath.row].startTime))
+      cell.rangeSlider.maximumSelectedValue = CGFloat(CMTimeGetSeconds(videoAssets[indexPath.row].endTime))
     }
     
     cell.rangeSlider.tag = indexPath.row
     cell.rangeSlider.delegate = self
     upateCellLabel(cell, start: kCMTimeZero, end: duration)
+    
+    print("Min Selected: \(cell.rangeSlider.minimumSelectedValue), Max Selected: \(cell.rangeSlider.maximumSelectedValue)")
+    print("Index: \(indexPath.row), MIN: \(cell.rangeSlider.minimumValue), MAX: \(cell.rangeSlider.maximumValue)")
     
     return cell
   }
@@ -162,6 +170,9 @@ class RangeSelectionController: UITableViewController {
   
   
   @IBAction func featureClose(sender: AnyObject) {
+    // free memory
+    videoAssets.removeAll()
+    
     delegate?.rangeSelectionFeatureClose()
   }
   
@@ -198,7 +209,12 @@ class RangeSelectionController: UITableViewController {
   
   private func composeAssetsToItem() -> AVPlayerItem {
     let composition = AVMutableComposition()
-    let videoTrack = composition.addMutableTrackWithMediaType(AVMediaTypeVideo, preferredTrackID: kCMPersistentTrackID_Invalid)
+    let track = composition.addMutableTrackWithMediaType(AVMediaTypeVideo, preferredTrackID: kCMPersistentTrackID_Invalid)
+    
+    if let transform = self.videoTrack?.preferredTransform {
+      track.preferredTransform = transform
+    }
+    
     var insertTime = kCMTimeZero
     
     for assetItem in videoAssets {
@@ -206,7 +222,7 @@ class RangeSelectionController: UITableViewController {
       
       do {
         let assetTrack = assetItem.asset.tracksWithMediaType(AVMediaTypeVideo).first!
-        try videoTrack.insertTimeRange(range, ofTrack: assetTrack, atTime: insertTime)
+        try track.insertTimeRange(range, ofTrack: assetTrack, atTime: insertTime)
       } catch (_) {
         print("Compose Asset Item Failure.")
       }

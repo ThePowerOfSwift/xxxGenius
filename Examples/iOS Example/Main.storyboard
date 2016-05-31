@@ -125,7 +125,7 @@
                                         <constraint firstItem="BNo-7S-bKi" firstAttribute="top" secondItem="khm-2l-nsN" secondAttribute="topMargin" id="1lx-m5-dfl"/>
                                         <constraint firstItem="BNo-7S-bKi" firstAttribute="leading" secondItem="khm-2l-nsN" secondAttribute="leadingMargin" constant="8" id="4Sw-HP-ob0"/>
                                         <constraint firstAttribute="bottomMargin" secondItem="BNo-7S-bKi" secondAttribute="bottom" id="5If-nW-dJM"/>
-                                        <constraint firstAttribute="trailingMargin" secondItem="6JK-rX-fOh" secondAttribute="trailing" constant="7" id="6JR-gR-tBA"/>
+                                        <constraint firstItem="6JK-rX-fOh" firstAttribute="trailing" secondItem="khm-2l-nsN" secondAttribute="trailingMargin" constant="-7" id="6JR-gR-tBA"/>
                                         <constraint firstItem="6JK-rX-fOh" firstAttribute="top" secondItem="rYf-nB-1hD" secondAttribute="bottom" constant="-5" id="KZD-So-x6c"/>
                                         <constraint firstItem="rYf-nB-1hD" firstAttribute="leading" secondItem="6JK-rX-fOh" secondAttribute="leading" constant="9" id="Kzu-MI-gnk"/>
                                         <constraint firstItem="rYf-nB-1hD" firstAttribute="trailing" secondItem="6JK-rX-fOh" secondAttribute="trailing" constant="2" id="egC-D6-40q"/>
