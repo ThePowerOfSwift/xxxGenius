@@ -93,7 +93,7 @@ class RangeSelectionController: UITableViewController {
     getAssetThumbnail(indexPath.row) { (resultImage) in
       cell.imageThumb.image = resultImage
     }
-
+    
     // cell slider min/max value
     let duration  = videoAssets[indexPath.row].asset.duration
     cell.rangeSlider.minimumValue = 0.0
@@ -123,50 +123,54 @@ class RangeSelectionController: UITableViewController {
     return 50.0
   }
   
-  /*
-   // Override to support conditional editing of the table view.
-   override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-   // Return false if you do not want the specified item to be editable.
-   return true
-   }
-   */
+  // Override to support conditional editing of the table view.
+  override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+    // Return false if you do not want the specified item to be editable.
+    
+    if videoAssets.count <= 1 {
+      return false
+    }
+    
+    return true
+  }
   
-  /*
-   // Override to support editing the table view.
-   override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-   if editingStyle == .Delete {
-   // Delete the row from the data source
-   tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-   } else if editingStyle == .Insert {
-   // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-   }
-   }
-   */
+  // Override to support editing the table view.
+  override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+    if editingStyle == .Delete {
+      
+      videoAssets.removeAtIndex(indexPath.row)
+      tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+      
+      // re-assign slider's tag to reflect the index in table, OR App would crash.
+      for index in 0...(videoAssets.count - 1) {
+        let index = NSIndexPath(forRow: index, inSection: 0)
+        let cell = self.tableView.cellForRowAtIndexPath(index) as! VideoRangeSelectionCell
+        cell.rangeSlider.tag = index.row
+      }
+      
+      delegate?.selectionUpdateVideoPlayer(composeAssetsToItem())
+    } else if editingStyle == .Insert {
+      // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+    }
+  }
   
-  /*
+
    // Override to support rearranging the table view.
    override func tableView(tableView: UITableView, moveRowAtIndexPath fromIndexPath: NSIndexPath, toIndexPath: NSIndexPath) {
-   
+    print("From Row:\(fromIndexPath), TO Row:\(toIndexPath)")
+    
+    if fromIndexPath == toIndexPath { return }
+    
+    // swap element
+    let from = fromIndexPath.row, to = toIndexPath.row
+    (videoAssets[from], videoAssets[to]) = (videoAssets[to], videoAssets[from])
    }
-   */
-  
-  /*
+
    // Override to support conditional rearranging of the table view.
    override func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-   // Return false if you do not want the item to be re-orderable.
-   return true
-   }
-   */
-  
-  /*
-   // MARK: - Navigation
-   
-   // In a storyboard-based application, you will often want to do a little preparation before navigation
-   override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-   // Get the new view controller using segue.destinationViewController.
-   // Pass the selected object to the new view controller.
-   }
-   */
+     // Return false if you do not want the item to be re-orderable.
+     return true
+  }
   
   
   @IBAction func featureClose(sender: AnyObject) {
@@ -186,6 +190,14 @@ class RangeSelectionController: UITableViewController {
     self.presentViewController(picker, animated: true, completion: nil)
   }
   
+  @IBAction func tableInEditMode(sender: UIButton) {
+    if self.tableView.editing {
+      self.tableView.setEditing(false, animated: true)
+    } else {
+      self.tableView.setEditing(true, animated: true)
+    }
+  }
+  
   // MARK: - Helps
   private func upateCellLabel(cell: VideoRangeSelectionCell, start: CMTime, end: CMTime) {
     
@@ -196,7 +208,7 @@ class RangeSelectionController: UITableViewController {
     let start_minutes = Int(start_time / 60)
     let start_seconds = Int(start_time % 60)
     
-    // end 
+    // end
     let end_minutes = Int(end_time / 60)
     let end_seconds = Int(end_time % 60)
     
