@@ -136,6 +136,8 @@ class RangeSelectionController: UITableViewController {
   
   // Override to support editing the table view.
   override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+    
+    // delete video asset
     if editingStyle == .Delete {
       
       videoAssets.removeAtIndex(indexPath.row)
@@ -149,6 +151,7 @@ class RangeSelectionController: UITableViewController {
       }
       
       delegate?.selectionUpdateVideoPlayer(composeAssetsToItem())
+      
     } else if editingStyle == .Insert {
       // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
     }
@@ -164,6 +167,8 @@ class RangeSelectionController: UITableViewController {
     // swap element
     let from = fromIndexPath.row, to = toIndexPath.row
     (videoAssets[from], videoAssets[to]) = (videoAssets[to], videoAssets[from])
+    
+    delegate?.selectionUpdateVideoPlayer(composeAssetsToItem())
    }
 
    // Override to support conditional rearranging of the table view.
