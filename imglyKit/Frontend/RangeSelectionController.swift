@@ -17,7 +17,7 @@ struct VideoAsset {
 }
 
 protocol RangeSelectionControllerDelegate {
-  func rangeSelectionFeatureClose()
+  func rangeSelectionFeatureClose(composition: AVMutableComposition?, track: AVMutableCompositionTrack?)
   func selectionUpdateVideoPlayer(item: AVPlayerItem)
 }
 
@@ -179,10 +179,12 @@ class RangeSelectionController: UITableViewController {
   
   
   @IBAction func featureClose(sender: AnyObject) {
+    
+    let compose = composeAssets()
+    delegate?.rangeSelectionFeatureClose(compose.composition, track: compose.track)
+    
     // free memory
     videoAssets.removeAll()
-    
-    delegate?.rangeSelectionFeatureClose()
   }
   
   @IBAction func addVideoAsset(sender: UIButton) {
@@ -231,7 +233,7 @@ class RangeSelectionController: UITableViewController {
     if let transform = self.videoTrack?.preferredTransform {
       track.preferredTransform = transform
     }
-    
+
     var insertTime = kCMTimeZero
     
     for assetItem in videoAssets {
@@ -252,7 +254,34 @@ class RangeSelectionController: UITableViewController {
     
     return playerItem
   }
+  
+  private func composeAssets() -> (composition: AVMutableComposition, track: AVMutableCompositionTrack) {
+    let composition = AVMutableComposition()
+    let track = composition.addMutableTrackWithMediaType(AVMediaTypeVideo, preferredTrackID: kCMPersistentTrackID_Invalid)
+    
+    if let transform = self.videoTrack?.preferredTransform {
+      track.preferredTransform = transform
+    }
+    
+    var insertTime = kCMTimeZero
+    
+    for assetItem in videoAssets {
+      let range = CMTimeRange(start: assetItem.startTime, end: assetItem.endTime)
+      
+      do {
+        let assetTrack = assetItem.asset.tracksWithMediaType(AVMediaTypeVideo).first!
+        try track.insertTimeRange(range, ofTrack: assetTrack, atTime: insertTime)
+      } catch (_) {
+        print("Compose Asset Item Failure.")
+      }
+      
+      insertTime = CMTimeAdd(insertTime, range.duration)
+    }
+    
+    return (composition, track)
+  }
 }
+
 
 // MARK: - YSRangeSliderDelegate
 extension RangeSelectionController: YSRangeSliderDelegate {

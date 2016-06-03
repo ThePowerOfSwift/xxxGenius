@@ -161,6 +161,7 @@ public class PGVideoEditorViewController: UIViewController {
         case .FastSlow:
           print("Layout FastSlow")
           fastslowController.delegate = self
+          fastslowController.videoTrack = self.videoTrack
           updateContainedViewHeight(FeatureViewHeight.fastSlow)
           flipViewController(toobarController, toVC: fastslowController)
         case .MultiVideosCombined:
@@ -529,7 +530,13 @@ extension PGVideoEditorViewController: FastSlowControllerDelegate {
 
 // MARK: - RangeSelectionControllerDelegate
 extension PGVideoEditorViewController: RangeSelectionControllerDelegate {
-  func rangeSelectionFeatureClose() {
+  func rangeSelectionFeatureClose(composition: AVMutableComposition?, track: AVMutableCompositionTrack?) {
+    
+    if let compo = composition, vTrack = track {
+      self.mixComposition = compo
+      self.videoTrack = vTrack
+    }
+    
     // show main Toolbar Control
     returnToToolbarController(videosRangeSelectionController)
   }

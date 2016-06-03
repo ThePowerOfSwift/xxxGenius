@@ -372,7 +372,6 @@
 		2BF51F701B41A7E700FFB4C2 /* IMGLYRecordingMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BF51F6F1B41A7E700FFB4C2 /* IMGLYRecordingMode.swift */; };
 		2BF717D91B414FC600D4A50C /* IMGLYShapeLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BF717D71B414FC600D4A50C /* IMGLYShapeLayer.swift */; };
 		2C1D13BB2E3D267C586E03EA /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD8D604303941FF4C08B09B2 /* Pods.framework */; };
-		63106E2E1CF02AC1009D6484 /* MultiVideosCombinedController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63106E2D1CF02AC1009D6484 /* MultiVideosCombinedController.swift */; };
 		633298AB1CC7612F00CAC059 /* PGVideoEditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 633298AA1CC7612F00CAC059 /* PGVideoEditorViewController.swift */; };
 		633298AF1CC76BB200CAC059 /* PGPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 633298AE1CC76BB200CAC059 /* PGPlayerView.swift */; };
 		6343D85C1CCB1D1700288459 /* PGRangeSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6343D8591CCB1D1700288459 /* PGRangeSlider.swift */; };
@@ -596,7 +595,6 @@
 		2BF4D5461AF115A200C801B2 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		2BF51F6F1B41A7E700FFB4C2 /* IMGLYRecordingMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IMGLYRecordingMode.swift; sourceTree = "<group>"; };
 		2BF717D71B414FC600D4A50C /* IMGLYShapeLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IMGLYShapeLayer.swift; sourceTree = "<group>"; };
-		63106E2D1CF02AC1009D6484 /* MultiVideosCombinedController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MultiVideosCombinedController.swift; path = Controllers/MultiVideosCombinedController.swift; sourceTree = "<group>"; };
 		633298AA1CC7612F00CAC059 /* PGVideoEditorViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PGVideoEditorViewController.swift; path = Video/PGVideoEditorViewController.swift; sourceTree = "<group>"; };
 		633298AE1CC76BB200CAC059 /* PGPlayerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PGPlayerView.swift; path = Video/PGPlayerView.swift; sourceTree = "<group>"; };
 		6343D8591CCB1D1700288459 /* PGRangeSlider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PGRangeSlider.swift; path = Video/PGRangeSlider.swift; sourceTree = "<group>"; };
@@ -974,7 +972,6 @@
 			children = (
 				63D64FC71CE1D8F10037C594 /* ToolbarController.swift */,
 				63D64FCA1CE1F82D0037C594 /* FastSlowController.swift */,
-				63106E2D1CF02AC1009D6484 /* MultiVideosCombinedController.swift */,
 				637ED89F1CF5C29D00DA7845 /* RangeSelectionController.swift */,
 				637ED8A01CF5C29D00DA7845 /* VideoRangeSelectionCell.swift */,
 				637ED8A31CF6B91900DA7845 /* YSRangeSlider.swift */,
@@ -1526,7 +1523,6 @@
 				2BF4D4AC1AF1154B00C801B2 /* IMGLYFixedFilterStack.swift in Sources */,
 				2BF4D5131AF1155E00C801B2 /* IMGLYHighcarbFilter.swift in Sources */,
 				2BF4D4FA1AF1155E00C801B2 /* IMGLYBleachedBlueFilter.swift in Sources */,
-				63106E2E1CF02AC1009D6484 /* MultiVideosCombinedController.swift in Sources */,
 				2BF4D3DE1AF1150500C801B2 /* IMGLYMainEditorViewController.swift in Sources */,
 				2BF4D5011AF1155E00C801B2 /* IMGLYCelsiusFilter.swift in Sources */,
 				2BF4D3D61AF1150500C801B2 /* IMGLYFilterCollectionViewCell.swift in Sources */,
