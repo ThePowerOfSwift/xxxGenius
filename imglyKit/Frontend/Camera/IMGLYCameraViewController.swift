@@ -193,7 +193,13 @@ public class IMGLYCameraViewController: UIViewController {
             if currentRecordingMode == oldValue {
                 return
             }
-            
+          
+          if currentRecordingMode == .Video {
+            completionBlock = showEditorNavigationControllerWithVideoFile
+          } else {
+            completionBlock = nil
+          }
+          
             self.cameraController?.switchToRecordingMode(self.currentRecordingMode)
         }
     }
@@ -261,7 +267,7 @@ public class IMGLYCameraViewController: UIViewController {
         configureCameraController()
         cameraController?.squareMode = squareMode
         cameraController?.switchToRecordingMode(currentRecordingMode, animated: false)
-        completionBlock = showEditorNavigationControllerWithVideoFile
+      
     }
     
     public override func viewWillAppear(animated: Bool) {
