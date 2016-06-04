@@ -169,6 +169,9 @@ public class PGVideoEditorViewController: UIViewController {
           updateContainedViewHeight(FeatureViewHeight.multiVideosCombined)
           videosRangeSelectionController.initAssets(mixComposition)
           flipViewController(toobarController, toVC: videosRangeSelectionController)
+        case .ReverseVideo:
+          print("ReverseVideo")
+          reverseVideo()
         }
       }
     }
@@ -238,6 +241,9 @@ public class PGVideoEditorViewController: UIViewController {
     // gesture
     let recognizer = UITapGestureRecognizer(target: self, action: #selector(handlePauseTap))
     playerView.addGestureRecognizer(recognizer)
+    
+    // tack MUST be init in the beginning
+    let _ = videoTrack
   }
   
   
@@ -294,12 +300,14 @@ public class PGVideoEditorViewController: UIViewController {
       
       var containedHeight = 50.0
       
-      if let style = layoutStyle{
+      if let style = layoutStyle {
         switch style {
         case .FastSlow:
           containedHeight = FeatureViewHeight.fastSlow
         case .MultiVideosCombined:
          containedHeight = FeatureViewHeight.multiVideosCombined
+        case .ReverseVideo:
+          containedHeight = FeatureViewHeight.fastSlow
         }
       }
       
@@ -425,7 +433,13 @@ public class PGVideoEditorViewController: UIViewController {
         self.updateSliderCurrent(time)
       }
     }
-    
+  }
+  
+  // MARK: - Reverse Video Feature
+  func reverseVideo() {
+    print(#function)
+    AVUtils.sharedInstance.reverseAsset(mixComposition, transform: videoTrack.preferredTransform)
+    AVUtils.sharedInstance.delegate = self
   }
   
   func playerItemDidReachEnd(notification: NSNotification) {
@@ -502,7 +516,6 @@ public class PGVideoEditorViewController: UIViewController {
   }
   
   func shareTo() {
-    
   }
 }
 
@@ -543,6 +556,16 @@ extension PGVideoEditorViewController: RangeSelectionControllerDelegate {
   
   func selectionUpdateVideoPlayer(item: AVPlayerItem) {
     playerItem = item
+  }
+}
+
+extension PGVideoEditorViewController: ReverseVideoDelegate {
+  func updateProgressValue(value: Float) {
+    print("Progress: \(value)")
+  }
+  
+  func reverseVideoComplete() {
+    print("Reverse Complete.")
   }
 }
 

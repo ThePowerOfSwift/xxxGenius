@@ -372,6 +372,7 @@
 		2BF51F701B41A7E700FFB4C2 /* IMGLYRecordingMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BF51F6F1B41A7E700FFB4C2 /* IMGLYRecordingMode.swift */; };
 		2BF717D91B414FC600D4A50C /* IMGLYShapeLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BF717D71B414FC600D4A50C /* IMGLYShapeLayer.swift */; };
 		2C1D13BB2E3D267C586E03EA /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD8D604303941FF4C08B09B2 /* Pods.framework */; };
+		63235BC41D030A9C00564643 /* AVUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63235BC31D030A9C00564643 /* AVUtils.swift */; };
 		633298AB1CC7612F00CAC059 /* PGVideoEditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 633298AA1CC7612F00CAC059 /* PGVideoEditorViewController.swift */; };
 		633298AF1CC76BB200CAC059 /* PGPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 633298AE1CC76BB200CAC059 /* PGPlayerView.swift */; };
 		6343D85C1CCB1D1700288459 /* PGRangeSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6343D8591CCB1D1700288459 /* PGRangeSlider.swift */; };
@@ -595,6 +596,7 @@
 		2BF4D5461AF115A200C801B2 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		2BF51F6F1B41A7E700FFB4C2 /* IMGLYRecordingMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IMGLYRecordingMode.swift; sourceTree = "<group>"; };
 		2BF717D71B414FC600D4A50C /* IMGLYShapeLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IMGLYShapeLayer.swift; sourceTree = "<group>"; };
+		63235BC31D030A9C00564643 /* AVUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AVUtils.swift; sourceTree = "<group>"; };
 		633298AA1CC7612F00CAC059 /* PGVideoEditorViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PGVideoEditorViewController.swift; path = Video/PGVideoEditorViewController.swift; sourceTree = "<group>"; };
 		633298AE1CC76BB200CAC059 /* PGPlayerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PGPlayerView.swift; path = Video/PGPlayerView.swift; sourceTree = "<group>"; };
 		6343D8591CCB1D1700288459 /* PGRangeSlider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PGRangeSlider.swift; path = Video/PGRangeSlider.swift; sourceTree = "<group>"; };
@@ -959,6 +961,7 @@
 			isa = PBXGroup;
 			children = (
 				633298AE1CC76BB200CAC059 /* PGPlayerView.swift */,
+				63235BC31D030A9C00564643 /* AVUtils.swift */,
 				633298AA1CC7612F00CAC059 /* PGVideoEditorViewController.swift */,
 				6343D8591CCB1D1700288459 /* PGRangeSlider.swift */,
 				6343D85A1CCB1D1700288459 /* PGRangeSliderThumbLayer.swift */,
@@ -1513,6 +1516,7 @@
 				2BF4D5041AF1155E00C801B2 /* IMGLYColorfulFilter.swift in Sources */,
 				637ED8A21CF5C29D00DA7845 /* VideoRangeSelectionCell.swift in Sources */,
 				2BF4D5281AF1155E00C801B2 /* IMGLYPolaSXFIlter.swift in Sources */,
+				63235BC41D030A9C00564643 /* AVUtils.swift in Sources */,
 				63D64FCB1CE1F82D0037C594 /* FastSlowController.swift in Sources */,
 				2BF4D3E81AF1150500C801B2 /* IMGLYSubEditorViewController.swift in Sources */,
 				2BF4D5121AF1155E00C801B2 /* IMGLYGobblinFilter.swift in Sources */,
