@@ -382,6 +382,7 @@
 		637ED8A11CF5C29D00DA7845 /* RangeSelectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637ED89F1CF5C29D00DA7845 /* RangeSelectionController.swift */; };
 		637ED8A21CF5C29D00DA7845 /* VideoRangeSelectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637ED8A01CF5C29D00DA7845 /* VideoRangeSelectionCell.swift */; };
 		637ED8A41CF6B91900DA7845 /* YSRangeSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637ED8A31CF6B91900DA7845 /* YSRangeSlider.swift */; };
+		63A43EFC1D057F6C00F7874C /* ProgressIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63A43EFB1D057F6C00F7874C /* ProgressIndicatorView.swift */; };
 		63D64FC81CE1D8F10037C594 /* ToolbarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D64FC71CE1D8F10037C594 /* ToolbarController.swift */; };
 		63D64FCB1CE1F82D0037C594 /* FastSlowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D64FCA1CE1F82D0037C594 /* FastSlowController.swift */; };
 		63D64FCE1CE34EB10037C594 /* FlatUIColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D64FCD1CE34EB10037C594 /* FlatUIColors.swift */; };
@@ -606,6 +607,7 @@
 		637ED89F1CF5C29D00DA7845 /* RangeSelectionController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RangeSelectionController.swift; sourceTree = "<group>"; };
 		637ED8A01CF5C29D00DA7845 /* VideoRangeSelectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoRangeSelectionCell.swift; sourceTree = "<group>"; };
 		637ED8A31CF6B91900DA7845 /* YSRangeSlider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YSRangeSlider.swift; sourceTree = "<group>"; };
+		63A43EFB1D057F6C00F7874C /* ProgressIndicatorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProgressIndicatorView.swift; sourceTree = "<group>"; };
 		63D64FC71CE1D8F10037C594 /* ToolbarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ToolbarController.swift; path = Controllers/ToolbarController.swift; sourceTree = "<group>"; };
 		63D64FCA1CE1F82D0037C594 /* FastSlowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FastSlowController.swift; path = Controllers/FastSlowController.swift; sourceTree = "<group>"; };
 		63D64FCD1CE34EB10037C594 /* FlatUIColors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlatUIColors.swift; sourceTree = "<group>"; };
@@ -961,6 +963,7 @@
 			isa = PBXGroup;
 			children = (
 				633298AE1CC76BB200CAC059 /* PGPlayerView.swift */,
+				63A43EFB1D057F6C00F7874C /* ProgressIndicatorView.swift */,
 				63235BC31D030A9C00564643 /* AVUtils.swift */,
 				633298AA1CC7612F00CAC059 /* PGVideoEditorViewController.swift */,
 				6343D8591CCB1D1700288459 /* PGRangeSlider.swift */,
@@ -1448,6 +1451,7 @@
 				2BF4D5311AF1155E00C801B2 /* IMGLYSoftFilter.swift in Sources */,
 				2BF4D4B11AF1154B00C801B2 /* IMGLYTextFilter.swift in Sources */,
 				2BF4D52D1AF1155E00C801B2 /* IMGLYSepiaHighFilter.swift in Sources */,
+				63A43EFC1D057F6C00F7874C /* ProgressIndicatorView.swift in Sources */,
 				2BF4D5441AF1159D00C801B2 /* IMGLYInstanceFactory.swift in Sources */,
 				2BF4D51C1AF1155E00C801B2 /* IMGLYLomoFilter.swift in Sources */,
 				2BF4D3DC1AF1150500C801B2 /* IMGLYImageCaptionButton.swift in Sources */,

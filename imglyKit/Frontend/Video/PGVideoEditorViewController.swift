@@ -21,6 +21,13 @@ public class PGVideoEditorViewController: UIViewController {
     static let fastSlow = 50.0
     static let multiVideosCombined = 150.0
   }
+  
+  lazy var backgroundView: UIView = {
+    let background = UIView()
+    background.backgroundColor = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 0.5)
+    background.hidden = true
+    return background
+  } ()
 
   lazy var playerView: PGPlayerView = PGPlayerView()
   lazy var player = AVPlayer()
@@ -244,6 +251,8 @@ public class PGVideoEditorViewController: UIViewController {
     
     // tack MUST be init in the beginning
     let _ = videoTrack
+    
+    view.addSubview(backgroundView)
   }
   
   
@@ -335,6 +344,12 @@ public class PGVideoEditorViewController: UIViewController {
     videoPlayPauseButton.snp_remakeConstraints { (make) in
       make.size.equalTo(100.0)
       make.center.equalTo(playerView)
+    }
+    
+    // progress view background
+    backgroundView.snp_remakeConstraints { (make) in
+      make.size.equalTo(view)
+      make.center.equalTo(view)
     }
   }
   
@@ -438,6 +453,9 @@ public class PGVideoEditorViewController: UIViewController {
   // MARK: - Reverse Video Feature
   func reverseVideo() {
     print(#function)
+    
+    backgroundView.hidden = false
+    
     AVUtils.sharedInstance.reverseAsset(mixComposition, transform: videoTrack.preferredTransform)
     AVUtils.sharedInstance.delegate = self
   }
