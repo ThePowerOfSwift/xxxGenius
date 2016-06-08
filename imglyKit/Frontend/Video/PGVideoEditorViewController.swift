@@ -605,6 +605,14 @@ extension PGVideoEditorViewController: ReverseVideoDelegate {
   
   func reverseVideoComplete() {
     print("Reverse Complete.")
+    
+    backgroundView.hidden = true
+    
+    let alertController = UIAlertController(title: "Saved", message: "Reversed Vidoe has saved in your Phone.", preferredStyle: .Alert)
+    let OKAction = UIAlertAction(title: "OK", style: .Default, handler: nil)
+    alertController.addAction(OKAction)
+    
+    presentViewController(alertController, animated: true, completion: nil)
   }
 }
 
