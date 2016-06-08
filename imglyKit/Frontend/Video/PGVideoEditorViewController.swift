@@ -181,7 +181,11 @@ public class PGVideoEditorViewController: UIViewController {
         case .ReverseVideo:
           print("ReverseVideo")
           reverseVideo()
+        case .RotateVideo:
+          print("RotateVideo")
+          rotateVideo()
         }
+        
       }
     }
   }
@@ -323,6 +327,8 @@ public class PGVideoEditorViewController: UIViewController {
         case .MultiVideosCombined:
          containedHeight = FeatureViewHeight.multiVideosCombined
         case .ReverseVideo:
+          containedHeight = FeatureViewHeight.fastSlow
+        case .RotateVideo:
           containedHeight = FeatureViewHeight.fastSlow
         }
       }
@@ -484,6 +490,15 @@ public class PGVideoEditorViewController: UIViewController {
     self.player.seekToTime(kCMTimeZero)
   }
   
+  func rotateVideo() {
+    print(#function)
+    
+    let rotation = CGAffineTransformRotate(videoTrack.preferredTransform, CGFloat(M_PI_2))
+    videoTrack.preferredTransform = rotation
+    
+    let item = AVPlayerItem(asset: mixComposition)
+    playerItem = item
+  }
   
   // MARK: - Error Handling
   

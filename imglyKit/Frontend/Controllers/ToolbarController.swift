@@ -12,6 +12,7 @@ enum ToobarSelectedFeature {
   case FastSlow
   case MultiVideosCombined
   case ReverseVideo
+  case RotateVideo
 }
 
 protocol ToolbarControllerDelegate {
@@ -43,8 +44,9 @@ class ToolbarController: UIViewController {
     let playFastSlowItem = UIBarButtonItem(image: UIImage(named: "time108"), style: .Plain, target: nil, action: #selector(showPlayFastSlow))
     let multiVideosCombinedItem = UIBarButtonItem(image: UIImage(named: "trim36"), style: .Plain, target: nil, action: #selector(showMultiVideosCombined))
     let reverseItem = UIBarButtonItem(image: UIImage(named: "reverse"), style: .Plain, target: nil, action: #selector(reverseVideo))
+    let rotationItem = UIBarButtonItem(image: UIImage(named: "rotation"), style: .Plain, target: nil, action: #selector(rotateVideo))
     
-    toolBar.setItems([playFastSlowItem, flexibleItem, multiVideosCombinedItem, flexibleItem, reverseItem], animated: true)
+    toolBar.setItems([playFastSlowItem, flexibleItem, multiVideosCombinedItem, flexibleItem, reverseItem, flexibleItem, rotationItem], animated: true)
   }
   
   func showPlayFastSlow() {
@@ -57,5 +59,9 @@ class ToolbarController: UIViewController {
   
   func reverseVideo() {
     delegate?.selectedFeature(ToobarSelectedFeature.ReverseVideo)
+  }
+  
+  func rotateVideo() {
+    delegate?.selectedFeature(ToobarSelectedFeature.RotateVideo)
   }
 }
