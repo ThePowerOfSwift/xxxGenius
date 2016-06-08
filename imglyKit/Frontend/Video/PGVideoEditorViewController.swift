@@ -24,10 +24,12 @@ public class PGVideoEditorViewController: UIViewController {
   
   lazy var backgroundView: UIView = {
     let background = UIView()
-    background.backgroundColor = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 0.5)
+    background.backgroundColor = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 0.7)
     background.hidden = true
     return background
   } ()
+  
+  var progressView = ProgressIndicatorView(frame: CGRectZero)
 
   lazy var playerView: PGPlayerView = PGPlayerView()
   lazy var player = AVPlayer()
@@ -252,7 +254,12 @@ public class PGVideoEditorViewController: UIViewController {
     // tack MUST be init in the beginning
     let _ = videoTrack
     
+    // progress background
     view.addSubview(backgroundView)
+    
+    // progress
+    backgroundView.addSubview(progressView)
+    progressView.closeButton.addTarget(self, action: #selector(closeProgressView), forControlEvents: .TouchUpInside)
   }
   
   
@@ -351,6 +358,14 @@ public class PGVideoEditorViewController: UIViewController {
       make.size.equalTo(view)
       make.center.equalTo(view)
     }
+    
+    // progress view
+    progressView.snp_remakeConstraints { (make) in
+      make.centerY.equalTo(backgroundView).offset(30.0)
+      make.centerX.equalTo(backgroundView)
+      make.width.equalTo(200.0)
+      make.height.equalTo(50.0)
+    }
   }
   
   private func updateContainedViewHeight(height: Double) {
@@ -448,6 +463,11 @@ public class PGVideoEditorViewController: UIViewController {
         self.updateSliderCurrent(time)
       }
     }
+  }
+  
+  func closeProgressView() {
+    print(#function)
+    backgroundView.hidden = true
   }
   
   // MARK: - Reverse Video Feature
@@ -580,6 +600,7 @@ extension PGVideoEditorViewController: RangeSelectionControllerDelegate {
 extension PGVideoEditorViewController: ReverseVideoDelegate {
   func updateProgressValue(value: Float) {
     print("Progress: \(value)")
+    progressView.progressBar.progress = value
   }
   
   func reverseVideoComplete() {

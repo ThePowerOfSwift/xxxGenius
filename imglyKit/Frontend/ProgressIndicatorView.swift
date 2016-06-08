@@ -46,14 +46,14 @@ class ProgressIndicatorView: UIView {
     // close button
     closeButton.snp_remakeConstraints { (make) in
       make.centerY.equalTo(self).offset(4.0)
-      make.size.equalTo(20.0)
+      make.size.equalTo(40.0)
       make.left.equalTo(self)
     }
     
     // progress bar
     progressBar.snp_remakeConstraints { (make) in
-      make.bottom.equalTo(closeButton)
-      make.left.equalTo(closeButton.snp_right).offset(4.0)
+      make.bottom.equalTo(closeButton).offset(-4.0)
+      make.left.equalTo(closeButton.snp_right).offset(6.0)
       make.right.equalTo(self)
       make.height.equalTo(10.0)
     }
